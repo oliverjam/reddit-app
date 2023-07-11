@@ -1,17 +1,20 @@
-import { useLoaderData } from "react-router-dom";
-import { Listing } from "./reddit/types.ts";
+import { Link, useLoaderData } from "react-router-dom";
+import * as api from "./reddit/api.ts";
 
 type Props = { title: string };
 
 export function Posts({ title }: Props) {
-  const posts = useLoaderData() as Listing;
+  const posts = useLoaderData() as Awaited<ReturnType<typeof api.posts>>;
   return (
     <>
       <h1>{title}</h1>
       <ul>
-        {posts.data.children.map((post) => {
-          if (post.kind !== "t3") return null;
-          return <li key={post.data.id}>{post.data.title}</li>;
+        {posts.map((post) => {
+          return (
+            <li key={post.data.id}>
+              <Link to={post.data.permalink}>{post.data.title}</Link>
+            </li>
+          );
         })}
       </ul>
     </>

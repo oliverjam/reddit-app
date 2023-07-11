@@ -1,7 +1,7 @@
-export type Listing = {
+export type Listing<K = Kind> = {
   kind: "Listing";
   data: {
-    children: Array<Kind>;
+    children: Array<K>;
   };
 };
 
@@ -30,7 +30,6 @@ export type Comment = {
 export type Link = {
   kind: "t3";
   data: SharedData & {
-    id: string;
     "is_self": boolean;
     selftext: string;
     "selftext_html": string;
@@ -139,6 +138,7 @@ export type Oembed = {
 };
 
 type SharedData = {
+  id: string;
   title: string;
   permalink: string;
   subreddit: string;
