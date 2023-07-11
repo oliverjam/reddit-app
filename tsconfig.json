@@ -9,6 +9,7 @@
     "jsx": "react-jsx",
     "types": ["vite/client"],
     "noEmit": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "allowImportingTsExtensions": true
   }
 }

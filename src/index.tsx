@@ -5,15 +5,25 @@ import {
   RouterProvider,
   useParams,
 } from "react-router-dom";
-import { Posts } from "./posts.js";
+import { Posts } from "./posts.tsx";
+import * as api from "./reddit/api.ts";
 import "./index.css";
 
 const router = createBrowserRouter([
-  { path: "/r/:subreddit/comments/:id/:title/*?", element: <Post /> },
-  { path: "/r/:subreddit", element: <Subreddit /> },
-  { path: "/u/:user", element: <User /> },
-  { path: "/", element: <Home /> },
-  { path: "/*", element: <Missing /> },
+  {
+    path: "/r/:subreddit/comments/:id/:title/*?",
+    Component: Post,
+  },
+  {
+    path: "/r/:subreddit",
+    Component: Subreddit,
+    loader: ({ params }) => {
+      return api.posts(params.subreddit as string);
+    },
+  },
+  { path: "/u/:user", Component: User },
+  { path: "/", Component: Home },
+  { path: "/*", Component: Missing },
 ]);
 
 function Post() {
