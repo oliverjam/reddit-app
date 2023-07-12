@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { Icon, IconName } from "./icon.tsx";
 import { parse_kind } from "./reddit/types.ts";
+import * as Meta from "./meta.tsx";
 import type { Link as LinkType, PostKind } from "./reddit/types.ts";
 import styles from "./post.module.css";
 
-export function Post(props: LinkType["data"]) {
+export function Post(props: LinkType["data"] & { show_sub?: boolean }) {
   const post_kind = parse_kind(props);
   const href = post_kind === "link" ? props.url : props.id;
   const images = props.preview?.images[0].resolutions;
@@ -27,16 +28,21 @@ export function Post(props: LinkType["data"]) {
       </Link>
       <header>
         <h2>
-          <Link to={href}>{props.title}</Link>
+          <Link to={href}>
+            {props.title}{" "}
+            {post_kind === "link" && (
+              <Icon name="external" fill="currentcolor" size={16} />
+            )}
+          </Link>
         </h2>
-        {post_kind === "link" && <span>{props.url}</span>}
+        {/* {post_kind === "link" && <span>{props.url}</span>} */}
         <div className={styles.Meta}>
-          {/* <Meta.Score>{props.score}</Meta.Score>
-            {props.show_sub && <Meta.Subreddit>{props.subreddit}</Meta.Subreddit>}
-            <Meta.Comments href={props.permalink}>
-              {props.num_comments}
-            </Meta.Comments>
-            <Meta.Author>{props.author}</Meta.Author> */}
+          <Meta.Score>{props.score}</Meta.Score>
+          {props.show_sub && <Meta.Subreddit>{props.subreddit}</Meta.Subreddit>}
+          <Meta.Comments href={props.permalink}>
+            {props.num_comments}
+          </Meta.Comments>
+          <Meta.Author>{props.author}</Meta.Author>
         </div>
       </header>
     </li>

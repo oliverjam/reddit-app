@@ -55,7 +55,16 @@ function Subreddit() {
           <h1>/r/{params.subreddit}</h1>
           <ul className={postStyles.List}>
             {posts.map((post) => {
-              return <Post {...post.data} key={post.data.id} />;
+              return (
+                <Post
+                  {...post.data}
+                  show_sub={
+                    params.subreddit === "all" ||
+                    params.subreddit?.includes("+")
+                  }
+                  key={post.data.id}
+                />
+              );
             })}
           </ul>
         </div>
