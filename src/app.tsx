@@ -1,64 +1,86 @@
 import {
-  createBrowserRouter,
   Link,
+  Outlet,
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
   useLoaderData,
+  useOutletContext,
   useParams,
 } from "react-router-dom";
 import * as api from "./reddit/api.ts";
+import { Post } from "./post.tsx";
+import postStyles from "./post.module.css";
+import columnsStyles from "./columns.module.css";
+import { Icon } from "./icon.tsx";
 
-export const router = createBrowserRouter([
-  {
-    path: "/p/:id/*?",
-    Component: Post,
-    loader: (c) => api.post(c.params.id!),
-  },
-  {
-    path: "/r/:subreddit",
-    Component: Subreddit,
-    loader: (c) => api.posts(c.params.subreddit!),
-  },
-  {
-    path: "/u/:user",
-    Component: User,
-    loader: (c) => api.user(c.params.user!),
-  },
-  { path: "/", Component: Home, loader: () => api.posts("all") },
-  { path: "/*", Component: Missing },
-]);
+export const router = createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      <Route
+        path="/r/:subreddit"
+        loader={(c) => api.posts(c.params.subreddit!)}
+        Component={Subreddit}
+      >
+        <Route
+          path=":id/*?"
+          // loader={(c) => api.post(c.params.id!)}
+          Component={PostPage}
+        />
+      </Route>
+      <Route
+        path="/u/:user"
+        loader={(c) => api.user(c.params.user!)}
+        Component={User}
+      />
+      <Route path="/*" Component={Missing} />
+    </>
+  )
+);
 
-type PostData = Awaited<ReturnType<typeof api.post>>;
 type PostsData = Awaited<ReturnType<typeof api.posts>>;
 type UserData = Awaited<ReturnType<typeof api.user>>;
 
-function Post() {
-  const { post, comments } = useLoaderData() as PostData;
+function Subreddit() {
+  const params = useParams<"subreddit" | "id">();
+  const posts = useLoaderData() as PostsData;
+  const showing_post = !!params.id;
+  const post = showing_post
+    ? posts.find((post) => post.data.id === params.id)
+    : undefined;
   return (
-    <main>
-      <h1>{post.title}</h1>
-      {post.is_self && (
-        <div dangerouslySetInnerHTML={{ __html: post.selftext_html }} />
-      )}
-      <p>{comments.length} comments</p>
+    <main className={columnsStyles.Columns}>
+      <header className={showing_post ? columnsStyles.Desktop : undefined}>
+        <div className="Gutter">
+          <h1>/r/{params.subreddit}</h1>
+          <ul className={postStyles.List}>
+            {posts.map((post) => {
+              return <Post {...post.data} key={post.data.id} />;
+            })}
+          </ul>
+        </div>
+      </header>
+      <div className={!showing_post ? columnsStyles.Desktop : undefined}>
+        <Outlet context={post} />
+      </div>
     </main>
   );
 }
 
-function Subreddit() {
-  const params = useParams<"subreddit">();
-  const posts = useLoaderData() as PostsData;
+function PostPage() {
+  const post = useOutletContext() as PostsData[0];
+  console.log(post);
   return (
-    <>
-      <h1>/r/{params.subreddit}</h1>
-      <ul>
-        {posts.map((post) => {
-          return (
-            <li key={post.data.id}>
-              <Link to={`/p/${post.data.id}/`}>{post.data.title}</Link>
-            </li>
-          );
-        })}
-      </ul>
-    </>
+    <div className="Gutter">
+      <Link to=".." aria-label="Back">
+        <Icon name="left" />
+      </Link>
+      <h1>{post.data.title}</h1>
+      {post.data.is_self && (
+        <div dangerouslySetInnerHTML={{ __html: post.data.selftext_html }} />
+      )}
+      {/* <p>{comments.length} comments</p> */}
+    </div>
   );
 }
 
@@ -68,7 +90,7 @@ function User() {
   return (
     <>
       <h1>/u/{params.user}</h1>
-      <ul>
+      <ul className={postStyles.List}>
         {posts.map((post) => {
           switch (post.kind) {
             case "t1":
@@ -80,30 +102,8 @@ function User() {
                 </li>
               );
             case "t3":
-              return (
-                <li key={post.data.id}>
-                  <Link to={post.data.permalink}>{post.data.title}</Link>
-                </li>
-              );
+              return <Post {...post.data} key={post.data.id} />;
           }
-        })}
-      </ul>
-    </>
-  );
-}
-
-function Home() {
-  const posts = useLoaderData() as Awaited<ReturnType<typeof api.posts>>;
-  return (
-    <>
-      <h1>/r/all</h1>
-      <ul>
-        {posts.map((post) => {
-          return (
-            <li key={post.data.id}>
-              <Link to={`/p/${post.data.id}/`}>{post.data.title}</Link>
-            </li>
-          );
         })}
       </ul>
     </>

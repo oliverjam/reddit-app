@@ -5,6 +5,7 @@ export function get(pathname: string, limit: number) {
   url.searchParams.set("raw_json", "1");
   url.searchParams.set("limit", limit.toString());
   url.pathname = pathname;
+  console.log(`${new Date().toLocaleTimeString()} Fetching ${url}`);
   return fetch(url).then((res) => {
     if (!res.ok) {
       throw new Error(res.statusText);

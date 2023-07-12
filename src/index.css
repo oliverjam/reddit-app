@@ -1,4 +1,88 @@
-body {
+* {
+  box-sizing: border-box;
   margin: 0;
-  font-family: system-ui;
+}
+
+html {
+  --s0: 0.25rem;
+  --s10: 0.5rem;
+  --s20: 1rem;
+  --s30: 1.25rem;
+  --s40: 1.5rem;
+  --s50: 2rem;
+  --s60: 4rem;
+  color-scheme: light dark;
+  font-size: clamp(0.75rem, 0.75rem + 0.5vw, 1rem);
+}
+
+body {
+  line-height: 1.5;
+  font-family: system-ui, sans-serif;
+}
+
+:is(h1, h2, h3, h4, h5, h6) {
+  font-weight: 700;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+:is(h2, h3, h4, h5, h6) {
+  font-size: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img,
+iframe,
+video {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+ul:where([class]) {
+  list-style: none;
+  padding-inline-start: 0;
+}
+
+.HStack {
+  display: flex;
+  gap: var(--s20);
+}
+
+.Pill {
+  max-inline-size: max-content;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s0);
+  border-radius: 8px;
+  padding-inline: 0.5em;
+  font-weight: 600;
+  background-color: ButtonFace;
+  color: ButtonText;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.PillLink:hover {
+  filter: brightness(90%);
+  text-decoration: none;
+}
+
+.PillLink[aria-current="page"] {
+  background-color: AccentColor;
+  color: AccentColorText;
+  filter: none;
+}
+
+.Gutter {
+  padding: clamp(1rem, 1rem + 2vw, 3rem);
 }
