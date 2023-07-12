@@ -92,13 +92,15 @@ function PostPage() {
       </Link>
       <Post {...post.data} />
       <hr />
-      <Suspense>
-        <Await resolve={data.comments}>
-          {(comments: Awaited<PostData["comments"]>) => (
-            <Comments comments={comments} />
-          )}
-        </Await>
-      </Suspense>
+      <div className="Gutter">
+        <Suspense>
+          <Await resolve={data.comments}>
+            {(comments: Awaited<PostData["comments"]>) => (
+              <Comments comments={comments} />
+            )}
+          </Await>
+        </Suspense>
+      </div>
     </div>
   );
 }

@@ -7,7 +7,7 @@ export function Comments({ comments }: { comments: Kind[] }) {
     return <button>+{comments[0].data.count}</button>;
   }
   return (
-    <ul className={styles.List + " Gutter"}>
+    <ul className={styles.List}>
       {comments.map((child) => {
         if (child.kind !== "t1") return null;
         return (
