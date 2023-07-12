@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Icon, IconName } from "./icon.tsx";
 import { parse_kind } from "./reddit/types.ts";
 import * as Meta from "./meta.tsx";
@@ -8,6 +8,8 @@ import styles from "./entry.module.css";
 export function Entry(props: LinkType["data"] & { show_sub?: boolean }) {
   const post_kind = parse_kind(props);
   const href = post_kind === "link" ? props.url : props.id;
+  const params = useParams<"id">();
+  const current = props.id === params.id;
   const images = props.preview?.images[0].resolutions;
   // images are in ascending size order. Try to use bigger one
   let image = images?.[1] || images?.[0];
@@ -19,10 +21,7 @@ export function Entry(props: LinkType["data"] & { show_sub?: boolean }) {
     };
   }
   return (
-    <li
-      className={styles.Entry}
-      // data-current={props.id === current ? true : undefined}
-    >
+    <li className={styles.Entry} data-current={current || undefined}>
       <Link to={href} className={styles.Thumbnail}>
         <Thumbnail icon={kind_icon(post_kind, props.stickied)} {...image} />
       </Link>
