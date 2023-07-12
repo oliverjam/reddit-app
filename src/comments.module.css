@@ -1,0 +1,45 @@
+.List .List {
+  margin-block-start: var(--s10);
+  margin-inline-start: 0.125rem;
+  border-left: 1px solid ButtonFace;
+  padding-block-start: var(--s10);
+  padding-inline-start: var(--s40);
+}
+
+.List > * + * {
+  margin-block-start: var(--s40);
+}
+
+.Comment > * + * {
+  margin-block-start: var(--s10);
+}
+
+.Comment > summary {
+  list-style: none;
+  font-size: 0.875rem;
+}
+
+.Comment > summary::after {
+  content: "+";
+  margin-left: var(--s10);
+  padding: var(--s0);
+}
+
+.Comment[open] > summary::after {
+  content: "";
+}
+
+.Markdown {
+  max-inline-size: 34rem;
+  --space: var(--s10);
+}
+
+.Author {
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.Divider {
+  margin-inline: var(--s0);
+  cursor: default;
+}

@@ -31,11 +31,11 @@ export async function user(
 type PostResponse = [Listing<Link>, Listing<Comment>];
 type PostData = Promise<{ post: Link["data"]; comments: Comment[] }>;
 
-export async function post(id: string): PostData {
+export function post(id: string) {
   const url = `/comments/${id}/`;
-  const [post, comments] = await get(url, 150) as PostResponse;
+  const res = get(url, 150);
   return {
-    post: post.data.children[0].data,
-    comments: comments.data.children,
+    // post: res.then(([post]: PostResponse) => post.data.children[0].data),
+    comments: res.then(([, comments]: PostResponse) => comments.data.children),
   };
 }

@@ -14,7 +14,7 @@ export function Post(props: Link["data"]) {
     selftext_html,
   } = props;
   return (
-    <article className={styles.Post}>
+    <article className={styles.Post + " Gutter"}>
       <header>
         <div className="HStack">
           <Meta.Score>{score}</Meta.Score>

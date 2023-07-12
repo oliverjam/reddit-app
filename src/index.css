@@ -52,6 +52,11 @@ ul:where([class]) {
   padding-inline-start: 0;
 }
 
+hr {
+  border-style: solid;
+  color: ButtonFace;
+}
+
 .HStack {
   display: flex;
   gap: var(--s20);

@@ -7,13 +7,17 @@ import {
   useLoaderData,
   useOutletContext,
   useParams,
+  defer,
+  Await,
 } from "react-router-dom";
+import { Suspense } from "react";
 import * as api from "./reddit/api.ts";
 import { Entry } from "./entry.tsx";
 import { Post } from "./post.tsx";
+import { Icon } from "./icon.tsx";
+import { Comments } from "./comments.tsx";
 import postStyles from "./entry.module.css";
 import columnsStyles from "./columns.module.css";
-import { Icon } from "./icon.tsx";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,7 +29,7 @@ export const router = createBrowserRouter(
       >
         <Route
           path=":id/*?"
-          // loader={(c) => api.post(c.params.id!)}
+          loader={(c) => defer(api.post(c.params.id!))}
           Component={PostPage}
         />
       </Route>
@@ -40,6 +44,7 @@ export const router = createBrowserRouter(
 );
 
 type PostsData = Awaited<ReturnType<typeof api.posts>>;
+type PostData = Awaited<ReturnType<typeof api.post>>;
 type UserData = Awaited<ReturnType<typeof api.user>>;
 
 function Subreddit() {
@@ -79,13 +84,21 @@ function Subreddit() {
 
 function PostPage() {
   const post = useOutletContext() as PostsData[0];
+  const data = useLoaderData() as PostData;
   return (
-    <div className="Gutter">
+    <div>
       <Link to=".." aria-label="Back">
         <Icon name="left" />
       </Link>
       <Post {...post.data} />
-      {/* <p>{comments.length} comments</p> */}
+      <hr />
+      <Suspense>
+        <Await resolve={data.comments}>
+          {(comments: Awaited<PostData["comments"]>) => (
+            <Comments comments={comments} />
+          )}
+        </Await>
+      </Suspense>
     </div>
   );
 }
