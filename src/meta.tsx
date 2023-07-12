@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Icon } from "./icon.tsx";
 
 type Kids<T> = { children: T };
@@ -20,24 +21,24 @@ export function Comments({
   children: number;
 }) {
   return (
-    <a href={href + "#comments"} className="Pill PillLink">
+    <Link to={href + "#comments"} className="Pill PillLink">
       <Icon name="comment" size={16} /> {num.format(children)}
-    </a>
+    </Link>
   );
 }
 
 export function Subreddit({ children }: Kids<string>) {
   return (
-    <a href={"/r/" + children} className="Pill PillLink">
+    <Link to={"/r/" + children} className="Pill PillLink">
       <Icon name="newspaper" size={16} /> r/{children}
-    </a>
+    </Link>
   );
 }
 
 export function Author({ children }: Kids<string>) {
   return (
-    <a href={"/u/" + children} className="Pill PillLink">
+    <Link to={"/u/" + children} className="Pill PillLink">
       <Icon name="user" size={16} /> u/{children}
-    </a>
+    </Link>
   );
 }

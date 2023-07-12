@@ -34,13 +34,10 @@ export function Entry(props: LinkType["data"] & { show_sub?: boolean }) {
             )}
           </Link>
         </h2>
-        {/* {post_kind === "link" && <span>{props.url}</span>} */}
         <div className={styles.Meta}>
           <Meta.Score>{props.score}</Meta.Score>
           {props.show_sub && <Meta.Subreddit>{props.subreddit}</Meta.Subreddit>}
-          <Meta.Comments href={props.permalink}>
-            {props.num_comments}
-          </Meta.Comments>
+          <Meta.Comments href={props.id}>{props.num_comments}</Meta.Comments>
           <Meta.Author>{props.author}</Meta.Author>
         </div>
       </header>
