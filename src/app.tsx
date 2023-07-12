@@ -9,8 +9,9 @@ import {
   useParams,
 } from "react-router-dom";
 import * as api from "./reddit/api.ts";
+import { Entry } from "./entry.tsx";
 import { Post } from "./post.tsx";
-import postStyles from "./post.module.css";
+import postStyles from "./entry.module.css";
 import columnsStyles from "./columns.module.css";
 import { Icon } from "./icon.tsx";
 
@@ -56,7 +57,7 @@ function Subreddit() {
           <ul className={postStyles.List}>
             {posts.map((post) => {
               return (
-                <Post
+                <Entry
                   {...post.data}
                   show_sub={
                     params.subreddit === "all" ||
@@ -78,16 +79,12 @@ function Subreddit() {
 
 function PostPage() {
   const post = useOutletContext() as PostsData[0];
-  console.log(post);
   return (
     <div className="Gutter">
       <Link to=".." aria-label="Back">
         <Icon name="left" />
       </Link>
-      <h1>{post.data.title}</h1>
-      {post.data.is_self && (
-        <div dangerouslySetInnerHTML={{ __html: post.data.selftext_html }} />
-      )}
+      <Post {...post.data} />
       {/* <p>{comments.length} comments</p> */}
     </div>
   );

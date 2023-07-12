@@ -86,3 +86,75 @@ ul:where([class]) {
 .Gutter {
   padding: clamp(1rem, 1rem + 2vw, 3rem);
 }
+
+.md {
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.md > * + * {
+  margin-block-start: var(--space, var(--s20));
+}
+
+.md a {
+  text-decoration: underline;
+  color: LinkText;
+}
+
+.md h1 {
+  font-size: 1.5rem;
+}
+
+.md h2 {
+  font-size: 1.25rem;
+}
+
+.md h3 {
+  font-size: 1rem;
+}
+
+.md table {
+  border-collapse: collapse;
+  border: var(--s0) solid;
+}
+
+.md thead {
+  background-color: ButtonFace;
+}
+
+.md tr:nth-child(even) {
+  background-color: ButtonFace;
+}
+
+.md td,
+.md th {
+  padding: var(--s0) var(--s20);
+}
+
+.md blockquote,
+.md pre {
+  border-inline-start: 1px solid;
+  margin-inline-start: 0.125rem;
+  padding: 0 var(--s10);
+  line-height: 1.4;
+}
+
+.md blockquote > * + * {
+  margin-block-start: var(--s10);
+}
+
+.md :is(h1, h2, h3, h4, h5, h6) {
+  --space: 1.5em;
+}
+
+.md ul {
+  list-style-type: disc;
+}
+
+.md :is(ol, ul, menu, dir) ul {
+  list-style-type: circle;
+}
+
+.md :is(ol, ul, menu, dir) :is(ol, ul, menu, dir) ul {
+  list-style-type: square;
+}

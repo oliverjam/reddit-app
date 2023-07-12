@@ -1,76 +1,16 @@
-.List {
-  margin-block-start: var(--s50);
-  container: entry / inline-size;
-  --thumb: clamp(24px, 24px + 10cqi, 100px);
-  font-size: clamp(0.75rem, 0.75rem + 1cqi, 1rem);
+.Post {
+  max-inline-size: 48rem;
 }
 
-.Entry {
-  display: grid;
-  grid-template-columns: var(--thumb) auto;
-  gap: var(--s20);
-  border-radius: 8px;
-  --pad: calc(var(--s30) / 2);
-  padding: var(--pad);
-  margin-inline: calc(var(--pad) * -1);
-  scroll-margin-block: var(--s30);
+.Post > * + * {
+  margin-block-start: var(--s20);
 }
 
-.Entry[data-current] {
-  background-color: AccentColor;
-  color: AccentColorText;
+.Post h1 {
+  margin-block-start: var(--s20);
+  font-size: clamp(1rem, 1rem + 1vw, 1.5em);
 }
 
-.Meta {
-  display: flex;
-  gap: var(--s10);
-  margin-block-start: var(--s10);
-  font-size: 0.875em;
-}
-
-@media (min-width: 30rem) {
-  .Entry {
-    align-items: center;
-    gap: var(--s40);
-  }
-}
-
-.Thumbnail {
-  display: grid;
-  place-items: center;
-  block-size: var(--thumb);
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: ButtonFace;
-}
-
-.Thumbnail > * {
-  grid-area: 1 / 1 / -1 / -1;
-}
-
-.Thumbnail > svg {
-  opacity: 0.75;
-  width: 1.75rem;
-  height: 1.75rem;
-}
-
-.Thumbnail > img {
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-}
-
-.ThumbnailFallback {
-  place-self: stretch;
-}
-
-.Comment {
-  --flow-space: var(--s10);
-  font-size: 0.875em;
-}
-
-.Compact {
-  margin-block-start: var(--s0);
-  margin-inline-start: 0.125rem;
-  border-left: 1px solid ButtonFace;
-  padding-inline-start: var(--s20);
+.Markdown {
+  font-size: 1.125rem;
 }
