@@ -1,0 +1,11 @@
+.Media {
+  position: relative;
+  aspect-ratio: var(--w, 16) / var(--h, 9);
+  max-height: 80vh;
+}
+
+.Media > * {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
