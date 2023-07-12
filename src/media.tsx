@@ -1,5 +1,6 @@
 import { Link, parse_kind } from "./reddit/types.ts";
 import styles from "./media.module.css";
+import { useRef } from "react";
 
 export function Media(data: Link["data"]) {
   const source = parse_media(data);
@@ -34,40 +35,8 @@ export function Media(data: Link["data"]) {
           })}
         </ul>
       );
-    case "video": {
-      const AUDIO_REGEX = /DASH_\d+.mp4/;
-      const audio_src = source.url.replace(AUDIO_REGEX, "DASH_audio.mp4");
-      return (
-        <div
-          className={styles.Media}
-          style={{ aspectRatio: `${source.width} / ${source.height}` }}
-        >
-          <video
-            width={source.width}
-            height={source.height}
-            src={source.url}
-            controls
-            muted
-            autoPlay
-            playsInline
-            loop
-          ></video>
-          <audio src={audio_src} playsInline loop></audio>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-              const vid = document.querySelector("video");
-              const aud = document.querySelector("audio");
-              vid.addEventListener("playing", () => aud.play());
-              vid.addEventListener("pause", () => aud.pause());
-              vid.addEventListener("seeked", () => aud.currentTime = vid.currentTime);
-              vid.addEventListener("ratechange", () => aud.playbackRate = vid.playbackRate);
-            `,
-            }}
-          ></script>
-        </div>
-      );
-    }
+    case "video":
+      return <VideoAudio {...source} />;
     case "gif":
       return (
         <video
@@ -95,6 +64,42 @@ export function Media(data: Link["data"]) {
     default:
       return <div>Couldn't parse media</div>;
   }
+}
+
+function VideoAudio({ url, width, height }: Video) {
+  const audio = useRef<HTMLAudioElement>(null);
+  const AUDIO_REGEX = /DASH_\d+.mp4/;
+  const audio_src = url.replace(AUDIO_REGEX, "DASH_audio.mp4");
+  return (
+    <div
+      className={styles.Media}
+      style={{ aspectRatio: `${width} / ${height}` }}
+    >
+      <video
+        width={width}
+        height={height}
+        src={url}
+        controls
+        muted
+        autoPlay
+        playsInline
+        loop
+        onPlaying={() => audio.current?.play()}
+        onPause={() => audio.current?.pause()}
+        onSeeked={(e) => {
+          if (audio.current) {
+            audio.current.currentTime = e.currentTarget.currentTime;
+          }
+        }}
+        onRateChange={(e) => {
+          if (audio.current) {
+            audio.current.playbackRate = e.currentTarget.playbackRate;
+          }
+        }}
+      ></video>
+      <audio src={audio_src} playsInline loop ref={audio}></audio>
+    </div>
+  );
 }
 
 type MediaKind =
