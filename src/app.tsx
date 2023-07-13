@@ -9,6 +9,7 @@ import {
   useParams,
   defer,
   Await,
+  ScrollRestoration,
 } from "react-router-dom";
 import { Suspense } from "react";
 import * as api from "./reddit/api.ts";
@@ -56,6 +57,7 @@ function Subreddit() {
     : undefined;
   return (
     <main className={columnsStyles.Columns}>
+      <ScrollRestoration />
       <header className={showing_post ? columnsStyles.Desktop : undefined}>
         <div className="Gutter">
           <h1>/r/{params.subreddit}</h1>
