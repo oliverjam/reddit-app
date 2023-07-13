@@ -11,7 +11,7 @@ import {
   Await,
   ScrollRestoration,
 } from "react-router-dom";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import * as api from "./reddit/api.ts";
 import { Entry } from "./entry.tsx";
 import { Post } from "./post.tsx";
@@ -22,7 +22,7 @@ import columnsStyles from "./columns.module.css";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
-    <>
+    <Route Component={Root}>
       <Route
         path="/r/:subreddit"
         loader={(c) => api.posts(c.params.subreddit!)}
@@ -40,9 +40,24 @@ export const router = createBrowserRouter(
         Component={User}
       />
       <Route path="/*" Component={Missing} />
-    </>
+    </Route>
   )
 );
+
+function Root() {
+  return (
+    <>
+      <ScrollRestoration />
+      <Outlet />
+    </>
+  );
+}
+
+function useTitle(title: string) {
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+}
 
 type PostsData = Awaited<ReturnType<typeof api.posts>>;
 type PostData = Awaited<ReturnType<typeof api.post>>;
@@ -50,6 +65,7 @@ type UserData = Awaited<ReturnType<typeof api.user>>;
 
 function Subreddit() {
   const params = useParams<"subreddit" | "id">();
+  useTitle(`r/${params.subreddit}`);
   const posts = useLoaderData() as PostsData;
   const showing_post = !!params.id;
   const post = showing_post
@@ -57,7 +73,6 @@ function Subreddit() {
     : undefined;
   return (
     <main className={columnsStyles.Columns}>
-      <ScrollRestoration />
       <header className={showing_post ? columnsStyles.Desktop : undefined}>
         <div className="Gutter">
           <h1>/r/{params.subreddit}</h1>
@@ -87,6 +102,7 @@ function Subreddit() {
 function PostPage() {
   const post = useOutletContext() as PostsData[0];
   const data = useLoaderData() as PostData;
+  useTitle(`${post.data.title} - r/${post.data.subreddit}`);
   return (
     <div>
       <Link to=".." aria-label="Back">
@@ -110,6 +126,7 @@ function PostPage() {
 function User() {
   const params = useParams<"user">();
   const posts = useLoaderData() as UserData;
+  useTitle(`u/${params.user}`);
   return (
     <>
       <h1>/u/{params.user}</h1>
