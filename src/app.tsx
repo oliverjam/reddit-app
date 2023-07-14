@@ -5,7 +5,6 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   useLoaderData,
-  useOutletContext,
   useParams,
   defer,
   Await,
@@ -19,6 +18,7 @@ import { Icon } from "./icon.tsx";
 import { Comments } from "./comments.tsx";
 import postStyles from "./entry.module.css";
 import columnsStyles from "./columns.module.css";
+import { Comment, Link as LinkType } from "./reddit/types.ts";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,7 +30,13 @@ export const router = createBrowserRouter(
       >
         <Route
           path=":id/*?"
-          loader={(c) => defer(api.post(c.params.id!))}
+          loader={async (c) => {
+            const { cached, fresh, comments } = api.post(c.params.id!);
+            return defer({
+              post: cached ? cached.data : await fresh,
+              comments,
+            });
+          }}
           Component={PostPage}
         />
       </Route>
@@ -60,7 +66,6 @@ function useTitle(title: string) {
 }
 
 type PostsData = Awaited<ReturnType<typeof api.posts>>;
-type PostData = Awaited<ReturnType<typeof api.post>>;
 type UserData = Awaited<ReturnType<typeof api.user>>;
 
 function Subreddit() {
@@ -75,7 +80,7 @@ function Subreddit() {
     <main className={columnsStyles.Columns}>
       <header className={showing_post ? columnsStyles.Desktop : undefined}>
         <div className="Gutter">
-          <h1>/r/{params.subreddit}</h1>
+          <h1>r/{params.subreddit}</h1>
           <ul className={postStyles.List}>
             {posts.map((post) => {
               return (
@@ -99,16 +104,17 @@ function Subreddit() {
   );
 }
 
+type PostData = { post: LinkType["data"]; comments: Comment[] };
+
 function PostPage() {
-  const post = useOutletContext() as PostsData[0];
   const data = useLoaderData() as PostData;
-  useTitle(`${post.data.title} - r/${post.data.subreddit}`);
+  useTitle(`${data.post.title} - r/${data.post.subreddit}`);
   return (
     <div>
       <Link to=".." aria-label="Back">
         <Icon name="left" />
       </Link>
-      <Post {...post.data} />
+      <Post {...data.post} />
       <hr />
       <div className="Gutter">
         <Suspense>
