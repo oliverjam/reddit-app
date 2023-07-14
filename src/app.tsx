@@ -8,9 +8,8 @@ import {
   useParams,
   defer,
   Await,
-  ScrollRestoration,
 } from "react-router-dom";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import * as api from "./reddit/api.ts";
 import { Entry } from "./entry.tsx";
 import { Post } from "./post.tsx";
@@ -19,10 +18,11 @@ import { CommentEntry, Comments } from "./comments.tsx";
 import postStyles from "./entry.module.css";
 import columnsStyles from "./columns.module.css";
 import { Comment, Link as LinkType } from "./reddit/types.ts";
+import { useScrollRestoration } from "./scroll.ts";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route Component={Root}>
+    <>
       <Route
         path="/r/:subreddit"
         loader={(c) => api.posts(c.params.subreddit!)}
@@ -46,18 +46,9 @@ export const router = createBrowserRouter(
         Component={User}
       />
       <Route path="/*" Component={Missing} />
-    </Route>
+    </>
   )
 );
-
-function Root() {
-  return (
-    <>
-      <ScrollRestoration />
-      <Outlet />
-    </>
-  );
-}
 
 function useTitle(title: string) {
   useEffect(() => {
@@ -72,6 +63,10 @@ function Subreddit() {
   const params = useParams<"subreddit" | "id">();
   const title = `r/${params.subreddit}`;
   useTitle(title);
+
+  const post_scroller = useRef<HTMLDivElement>(null);
+  useScrollRestoration(post_scroller);
+
   const posts = useLoaderData() as PostsData;
   const showing_post = !!params.id;
   const post = showing_post
@@ -98,7 +93,10 @@ function Subreddit() {
           </ul>
         </div>
       </header>
-      <div className={!showing_post ? columnsStyles.Desktop : undefined}>
+      <div
+        className={!showing_post ? columnsStyles.Desktop : undefined}
+        ref={post_scroller}
+      >
         <Outlet context={post} />
       </div>
     </main>
