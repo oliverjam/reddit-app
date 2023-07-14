@@ -15,7 +15,7 @@ import * as api from "./reddit/api.ts";
 import { Entry } from "./entry.tsx";
 import { Post } from "./post.tsx";
 import { Icon } from "./icon.tsx";
-import { Comments } from "./comments.tsx";
+import { CommentEntry, Comments } from "./comments.tsx";
 import postStyles from "./entry.module.css";
 import columnsStyles from "./columns.module.css";
 import { Comment, Link as LinkType } from "./reddit/types.ts";
@@ -70,7 +70,8 @@ type UserData = Awaited<ReturnType<typeof api.user>>;
 
 function Subreddit() {
   const params = useParams<"subreddit" | "id">();
-  useTitle(`r/${params.subreddit}`);
+  const title = `r/${params.subreddit}`;
+  useTitle(title);
   const posts = useLoaderData() as PostsData;
   const showing_post = !!params.id;
   const post = showing_post
@@ -80,7 +81,7 @@ function Subreddit() {
     <main className={columnsStyles.Columns}>
       <header className={showing_post ? columnsStyles.Desktop : undefined}>
         <div className="Gutter">
-          <h1>r/{params.subreddit}</h1>
+          <h1>{title}</h1>
           <ul className={postStyles.List}>
             {posts.map((post) => {
               return (
@@ -132,27 +133,22 @@ function PostPage() {
 function User() {
   const params = useParams<"user">();
   const posts = useLoaderData() as UserData;
-  useTitle(`u/${params.user}`);
+  const title = `u/${params.user}`;
+  useTitle(title);
   return (
-    <>
-      <h1>/u/{params.user}</h1>
+    <div className="Gutter">
+      <h1>{title}</h1>
       <ul className={postStyles.List}>
         {posts.map((post) => {
           switch (post.kind) {
             case "t1":
-              return (
-                <li key={post.data.id}>
-                  <p
-                    dangerouslySetInnerHTML={{ __html: post.data.body_html }}
-                  />
-                </li>
-              );
+              return <CommentEntry {...post.data} key={post.data.id} />;
             case "t3":
-              return <Post {...post.data} key={post.data.id} />;
+              return <Entry {...post.data} key={post.data.id} />;
           }
         })}
       </ul>
-    </>
+    </div>
   );
 }
 

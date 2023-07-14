@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Time } from "./time.tsx";
 import { Comment as CommentType, Kind } from "./reddit/types.ts";
 import styles from "./comments.module.css";
@@ -20,7 +21,7 @@ export function Comments({ comments }: { comments: Kind[] }) {
   );
 }
 
-export function Comment({
+function Comment({
   stickied,
   author,
   permalink,
@@ -51,7 +52,7 @@ export function Comment({
         <Divider />
         <Score>{score}</Score>
         <Divider />
-        <Link href={permalink}>{created_utc}</Link>
+        <Permalink href={permalink}>{created_utc}</Permalink>
       </summary>
       <Markdown __html={body_html} />
       {replies && <Comments comments={replies.data.children} />}
@@ -59,9 +60,32 @@ export function Comment({
   );
 }
 
+export function CommentEntry({
+  link_permalink,
+  link_title,
+  score,
+  permalink,
+  created_utc,
+  body_html,
+}: CommentType["data"]) {
+  return (
+    <li className={styles.Entry}>
+      <Link to={link_permalink}>
+        <h2>{link_title}</h2>
+      </Link>
+      <div className={styles.Compact}>
+        <Score>{score}</Score>
+        <Divider />
+        <Permalink href={permalink}>{created_utc}</Permalink>
+        <Markdown __html={body_html} />
+      </div>
+    </li>
+  );
+}
+
 const num = new Intl.NumberFormat("en-GB");
 
-export function Score({ children }: { children: number }) {
+function Score({ children }: { children: number }) {
   const label = children === 1 ? "point" : "points";
   return (
     <span>
@@ -70,7 +94,7 @@ export function Score({ children }: { children: number }) {
   );
 }
 
-export function Divider() {
+function Divider() {
   return (
     <span aria-hidden="true" className={styles.Divider}>
       •
@@ -78,15 +102,15 @@ export function Divider() {
   );
 }
 
-export function Link({ href, children }: { href: string; children: number }) {
+function Permalink({ href, children }: { href: string; children: number }) {
   return (
-    <a href={href}>
+    <Link to={href}>
       <Time>{children}</Time>
-    </a>
+    </Link>
   );
 }
 
-export function Markdown({ __html }: { __html: string }) {
+function Markdown({ __html }: { __html: string }) {
   return (
     <div className={styles.Markdown} dangerouslySetInnerHTML={{ __html }} />
   );

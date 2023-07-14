@@ -43,3 +43,18 @@
   margin-inline: var(--s0);
   cursor: default;
 }
+
+.Entry {
+  font-size: 0.875em;
+}
+
+.Entry + .Entry {
+  margin-block-start: var(--s30);
+}
+
+.Compact {
+  margin-block-start: var(--s0);
+  margin-inline-start: 0.125rem;
+  border-left: 1px solid ButtonFace;
+  padding-inline-start: var(--s20);
+}
