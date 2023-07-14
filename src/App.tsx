@@ -1,1 +1,0 @@
-          path="comments/:id/:slug?/*?"
