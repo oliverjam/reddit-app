@@ -29,7 +29,7 @@ export const router = createBrowserRouter(
         Component={Subreddit}
       >
         <Route
-          path=":id/*?"
+          path="comments/:id/:slug?/*?"
           loader={async (c) => {
             const { cached, fresh, comments } = api.post(c.params.id!);
             return defer({
@@ -117,7 +117,7 @@ function PostPage() {
       </Link>
       <Post {...data.post} />
       <hr />
-      <div className="Gutter">
+      <div className="Gutter" id="comments">
         <Suspense>
           <Await resolve={data.comments}>
             {(comments: Awaited<PostData["comments"]>) => (
