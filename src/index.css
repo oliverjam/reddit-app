@@ -144,6 +144,10 @@ hr {
   line-height: 1.4;
 }
 
+.md pre {
+  overflow: auto;
+}
+
 .md blockquote > * + * {
   margin-block-start: var(--s10);
 }
