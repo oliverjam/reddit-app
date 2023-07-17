@@ -7,7 +7,7 @@ import styles from "./entry.module.css";
 
 export function Entry(props: LinkType["data"] & { show_sub?: boolean }) {
   const post_kind = parse_kind(props);
-  const href = post_kind === "link" ? props.url : props.permalink;
+  const href = post_kind === "link" ? props.url : relative_url(props.permalink);
   const params = useParams<"id">();
   const current = props.id === params.id;
   const images = props.preview?.images[0].resolutions;
@@ -37,7 +37,7 @@ export function Entry(props: LinkType["data"] & { show_sub?: boolean }) {
         <div className={styles.Meta}>
           <Meta.Score>{props.score}</Meta.Score>
           {props.show_sub && <Meta.Subreddit>{props.subreddit}</Meta.Subreddit>}
-          <Meta.Comments href={props.permalink}>
+          <Meta.Comments href={relative_url(props.permalink)}>
             {props.num_comments}
           </Meta.Comments>
           <Meta.Author>{props.author}</Meta.Author>
@@ -45,6 +45,10 @@ export function Entry(props: LinkType["data"] & { show_sub?: boolean }) {
       </header>
     </li>
   );
+}
+
+function relative_url(permalink: string) {
+  return permalink.split("/").slice(3).join("/");
 }
 
 type ThumbnailProps = {

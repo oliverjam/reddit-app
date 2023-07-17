@@ -37,18 +37,18 @@ function Comment({
   return (
     <details className={styles.Comment} open={!is_closed}>
       <summary>
-        <a
+        <Link
           className={
             styles.Author + (is_submitter || mod ? " Pill PillLink" : "")
           }
-          href={"/u/" + author}
+          to={"/u/" + author}
           style={{
             backgroundColor: mod ? "AccentColor" : "",
             color: mod ? "AccentColorText" : "",
           }}
         >
           {author}
-        </a>
+        </Link>
         <Divider />
         <Score>{score}</Score>
         <Divider />
@@ -68,9 +68,10 @@ export function CommentEntry({
   created_utc,
   body_html,
 }: CommentType["data"]) {
+  const { pathname } = new URL(link_permalink);
   return (
     <li className={styles.Entry}>
-      <Link to={link_permalink}>
+      <Link to={pathname}>
         <h2>{link_title}</h2>
       </Link>
       <div className={styles.Compact}>
