@@ -13,7 +13,7 @@ export function Entry(props: LinkType["data"] & { show_sub?: boolean }) {
   const images = props.preview?.images[0].resolutions;
   // images are in ascending size order. Try to use bigger one
   let image = images?.[1] || images?.[0];
-  if (!image && props.thumbnail !== "self") {
+  if (!image && props.thumbnail !== "self" && props.thumbnail !== "default") {
     image = {
       url: props.thumbnail,
       width: +props.thumbnail_width,
