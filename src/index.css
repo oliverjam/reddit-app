@@ -120,7 +120,7 @@ hr {
 
 .md table {
   border-collapse: collapse;
-  border: var(--s0) solid;
+  border: 1px solid;
 }
 
 .md thead {
