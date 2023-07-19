@@ -81,7 +81,21 @@ function Subreddit() {
     <main className={columnsStyles.Columns}>
       <header className={showing_post ? columnsStyles.Desktop : undefined}>
         <div className="Gutter">
-          <h1>{title}</h1>
+          <div
+            className="HStack"
+            style={{ alignItems: "center", justifyContent: "space-between" }}
+          >
+            <h1>{title}</h1>
+            <Link
+              to=""
+              relative="path"
+              replace
+              aria-label="Refresh posts"
+              title="Refresh posts"
+            >
+              <Icon name="reload" />
+            </Link>
+          </div>
           <ul className="HStack" style={{ marginBlockStart: "var(--s20)" }}>
             <SortEntries sort="hot">Hot</SortEntries>
             <SortEntries sort="new">New</SortEntries>
