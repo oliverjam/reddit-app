@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Time } from "./time.tsx";
 import { Comment as CommentType, Kind } from "./reddit/types.ts";
 import styles from "./comments.module.css";

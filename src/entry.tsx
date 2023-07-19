@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Icon, IconName } from "./icon.tsx";
 import { parse_kind } from "./reddit/types.ts";
 import * as Meta from "./meta.tsx";
@@ -6,8 +6,12 @@ import type { Link as LinkType, PostKind } from "./reddit/types.ts";
 import styles from "./entry.module.css";
 
 export function Entry(props: LinkType["data"] & { show_sub?: boolean }) {
+  const [search] = useSearchParams();
   const post_kind = parse_kind(props);
-  const href = post_kind === "link" ? props.url : relative_url(props.permalink);
+  const href =
+    post_kind === "link"
+      ? props.url
+      : relative_url(props.permalink) + "?" + search.toString();
   const params = useParams<"id">();
   const current = props.id === params.id;
   const images = props.preview?.images[0].resolutions;

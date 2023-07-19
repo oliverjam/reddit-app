@@ -19,19 +19,24 @@ import postStyles from "./entry.module.css";
 import columnsStyles from "./columns.module.css";
 import { Comment, Link as LinkType } from "./reddit/types.ts";
 import { useScrollRestoration } from "./scroll.ts";
+import { SortEntries, SortComments } from "./sort.tsx";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route
-        path="/r/:subreddit"
-        loader={(c) => api.posts(c.params.subreddit!)}
+        path="/r/:subreddit/:sort?"
+        loader={(c) => {
+          const t = new URL(c.request.url).searchParams.get("t");
+          return api.posts(c.params.subreddit!, c.params.sort, t);
+        }}
         Component={Subreddit}
       >
         <Route
           path="comments/:id/:slug?/*?"
           loader={async (c) => {
-            const { cached, fresh, comments } = api.post(c.params.id!);
+            const sort = new URL(c.request.url).searchParams.get("sort");
+            const { cached, fresh, comments } = api.post(c.params.id!, sort);
             return defer({
               post: cached ? cached.data : await fresh,
               comments,
@@ -77,6 +82,25 @@ function Subreddit() {
       <header className={showing_post ? columnsStyles.Desktop : undefined}>
         <div className="Gutter">
           <h1>{title}</h1>
+          <ul className="HStack" style={{ marginBlockStart: "var(--s20)" }}>
+            <SortEntries sort="hot">Hot</SortEntries>
+            <SortEntries sort="new">New</SortEntries>
+            <SortEntries sort="top" t="all">
+              Top ever
+            </SortEntries>
+            <SortEntries sort="top" t="year">
+              Top year
+            </SortEntries>
+            <SortEntries sort="top" t="month">
+              Top month
+            </SortEntries>
+            <SortEntries sort="top" t="week">
+              Top week
+            </SortEntries>
+            <SortEntries sort="top" t="day">
+              Top today
+            </SortEntries>
+          </ul>
           <ul className={postStyles.List}>
             {posts.map((post) => {
               return (
@@ -116,6 +140,13 @@ function PostPage() {
       <Post {...data.post} />
       <hr />
       <div className="Gutter" id="comments">
+        <ul className="HStack" style={{ marginBlockEnd: "var(--s40)" }}>
+          <SortComments sort="best">Best</SortComments>
+          <SortComments sort="top">Top</SortComments>
+          <SortComments sort="new">New</SortComments>
+          <SortComments sort="old">Old</SortComments>
+          <SortComments sort="controversial">Controversial</SortComments>
+        </ul>
         <Suspense>
           <Await resolve={data.comments}>
             {(comments: Awaited<PostData["comments"]>) => (
