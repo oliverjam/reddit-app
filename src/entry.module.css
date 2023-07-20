@@ -6,6 +6,7 @@
 }
 
 .Entry {
+  position: relative;
   display: grid;
   grid-template-columns: var(--thumb) auto;
   gap: var(--s20);
@@ -26,6 +27,11 @@
   gap: var(--s10);
   margin-block-start: var(--s10);
   font-size: 0.875em;
+}
+
+.Meta > a {
+  z-index: 10;
+  isolation: isolate;
 }
 
 @media (min-width: 30rem) {
@@ -61,6 +67,16 @@
 
 .ThumbnailFallback {
   place-self: stretch;
+}
+
+.Link:hover {
+  text-decoration: none;
+}
+
+.Link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
 }
 
 .Comment {

@@ -26,12 +26,12 @@ export function Entry(props: LinkType["data"] & { show_sub?: boolean }) {
   }
   return (
     <li className={styles.Entry} data-current={current || undefined}>
-      <Link to={href} className={styles.Thumbnail}>
+      <div className={styles.Thumbnail}>
         <Thumbnail icon={kind_icon(post_kind, props.stickied)} {...image} />
-      </Link>
+      </div>
       <header>
         <h2>
-          <Link to={href}>
+          <Link to={href} className={styles.Link}>
             {props.title}{" "}
             {post_kind === "link" && (
               <Icon name="external" fill="currentcolor" size={16} />
