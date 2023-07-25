@@ -56,3 +56,9 @@ export function post(id: string, sort: string | null) {
   const comments = res.then(([, comments]) => comments.data.children);
   return { cached, fresh, comments };
 }
+
+export async function search(query: string) {
+  const url = `/api/search_reddit_names.json`;
+  const res = await get(url, { query, include_over_18: "true" });
+  return res.names;
+}

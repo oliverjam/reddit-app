@@ -39,6 +39,11 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Forces icon links to be same size as icon */
+:where(a:has(svg:only-child)) {
+  display: inline-grid;
+}
+
 img,
 iframe,
 video {

@@ -20,6 +20,7 @@ import columnsStyles from "./columns.module.css";
 import { Comment, Link as LinkType } from "./reddit/types.ts";
 import { useScrollRestoration } from "./scroll.ts";
 import { SortEntries, SortComments } from "./sort.tsx";
+import { Search } from "./search.tsx";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -51,6 +52,13 @@ export const router = createBrowserRouter(
         Component={User}
       />
       <Route path="/*" Component={Missing} />
+      <Route
+        path="/search"
+        loader={(c) => {
+          const query = new URL(c.request.url).searchParams.get("query") || "";
+          return api.search(query);
+        }}
+      />
     </>
   )
 );
@@ -74,9 +82,6 @@ function Subreddit() {
 
   const posts = useLoaderData() as PostsData;
   const showing_post = !!params.id;
-  const post = showing_post
-    ? posts.find((post) => post.data.id === params.id)
-    : undefined;
   return (
     <main className={columnsStyles.Columns}>
       <header className={showing_post ? columnsStyles.Desktop : undefined}>
@@ -85,7 +90,7 @@ function Subreddit() {
             className="HStack"
             style={{ alignItems: "center", justifyContent: "space-between" }}
           >
-            <h1>{title}</h1>
+            <Search defaultValue={params.subreddit!} />
             <Link
               to=""
               relative="path"
@@ -135,7 +140,7 @@ function Subreddit() {
         className={!showing_post ? columnsStyles.Desktop : undefined}
         ref={post_scroller}
       >
-        <Outlet context={post} />
+        <Outlet />
       </div>
     </main>
   );
