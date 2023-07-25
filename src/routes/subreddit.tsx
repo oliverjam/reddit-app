@@ -5,6 +5,7 @@ import { Icon } from "../icon.tsx";
 import { SortEntries } from "../sort.tsx";
 import { Search } from "../search.tsx";
 import { Entry } from "../entry.tsx";
+import { DisplayError } from "../error.tsx";
 import type { Link as LinkType } from "../reddit/types.ts";
 import type { Handle } from "./root.tsx";
 import postStyles from "../entry.module.css";
@@ -86,3 +87,12 @@ export function Component() {
 }
 
 Component.displayName = "SubredditPage";
+
+export function ErrorBoundary() {
+  return (
+    <div className="Cover">
+      <DisplayError>Failed to load posts</DisplayError>
+      <Outlet />
+    </div>
+  );
+}

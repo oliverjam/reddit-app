@@ -97,6 +97,14 @@ hr {
   padding: clamp(1rem, 1rem + 2vw, 3rem);
 }
 
+.Cover {
+  min-block-size: 100vh;
+  display: grid;
+  gap: var(--s10);
+  place-content: center;
+  place-items: center;
+}
+
 .md {
   line-height: 1.5;
   word-break: break-word;

@@ -1,3 +1,4 @@
+import { DisplayError } from "../error.tsx";
 import { Handle } from "./root.tsx";
 
 export const handle: Handle = {
@@ -5,7 +6,11 @@ export const handle: Handle = {
 };
 
 export function Component() {
-  return <h1>Not found</h1>;
+  return (
+    <div className="Cover">
+      <DisplayError retry={false}>Not found</DisplayError>
+    </div>
+  );
 }
 
 Component.displayName = "MissingPage";
