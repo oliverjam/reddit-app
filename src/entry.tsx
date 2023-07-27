@@ -3,7 +3,7 @@ import { Icon, IconName } from "./icon.tsx";
 import { parse_kind } from "./reddit/types.ts";
 import * as Meta from "./meta.tsx";
 import type { Link as LinkType, PostKind } from "./reddit/types.ts";
-import styles from "./entry.module.css";
+import clsx from "clsx";
 
 export function Entry(props: LinkType["data"] & { show_sub?: boolean }) {
   const [search] = useSearchParams();
@@ -25,26 +25,36 @@ export function Entry(props: LinkType["data"] & { show_sub?: boolean }) {
     };
   }
   return (
-    <li className={styles.Entry} data-current={current || undefined}>
-      <div className={styles.Thumbnail}>
+    <li
+      className={clsx(
+        "relative flex gap-3 md:gap-5 items-start md:items-center rounded-lg p-3 -mx-3 scroll-my-3",
+        { "bg-[AccentColor] text-[AccentColorText]": current }
+      )}
+    >
+      <div className="flex-none grid place-items-center rounded-lg bg-[ButtonFace] w-12 md:w-14 lg:w-18 xl:w-24 aspect-square overflow-hidden">
         <Thumbnail icon={kind_icon(post_kind, props.stickied)} {...image} />
       </div>
       <header>
         <h2>
-          <Link to={href} className={styles.Link}>
+          <Link to={href} className="after:absolute after:inset-0">
             {props.title}{" "}
             {post_kind === "link" && (
-              <Icon name="external" fill="currentcolor" size={16} />
+              <Icon
+                name="external"
+                className="inline align-baseline"
+                fill="currentcolor"
+                size={12}
+              />
             )}
           </Link>
         </h2>
-        <div className={styles.Meta}>
+        <div className="flex gap-2 flex-wrap mt-2 text-xs md:text-sm z-10 isolate max-w-max">
           <Meta.Score>{props.score}</Meta.Score>
           {props.show_sub && <Meta.Subreddit>{props.subreddit}</Meta.Subreddit>}
           <Meta.Comments href={relative_url(props.permalink)}>
             {props.num_comments}
           </Meta.Comments>
-          <Meta.Author>{props.author}</Meta.Author>
+          {!props.show_sub && <Meta.Author>{props.author}</Meta.Author>}
         </div>
       </header>
     </li>
@@ -66,12 +76,23 @@ type ThumbnailProps = {
 function Thumbnail({ url, width, height, icon }: ThumbnailProps) {
   return (
     <>
-      {url ? (
-        <img src={url} width={width} height={height} alt="" />
-      ) : (
-        <div className={styles.ThumbnailFallback} />
+      {url && (
+        <img
+          className="row-span-full col-span-full object-cover aspect-square"
+          src={url}
+          width={width}
+          height={height}
+          alt=""
+        />
       )}
-      {icon && <Icon name={icon} size={40} fill={url ? "white" : undefined} />}
+      {icon && (
+        <Icon
+          className="row-span-full col-span-full xl:w-8 xl:h-8"
+          name={icon}
+          size={24}
+          fill={url ? "white" : undefined}
+        />
+      )}
     </>
   );
 }

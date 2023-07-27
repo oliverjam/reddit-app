@@ -8,12 +8,16 @@ import { Entry } from "../entry.tsx";
 import { DisplayError } from "../error.tsx";
 import type { Link as LinkType } from "../reddit/types.ts";
 import type { Handle } from "./root.tsx";
-import postStyles from "../entry.module.css";
-import columnsStyles from "../columns.module.css";
+import clsx from "clsx";
 
 export const handle: Handle = {
   title: ({ params }) => `r/${params.subreddit}`,
 };
+
+const current_panel = (current: boolean) =>
+  clsx("overflow-y-auto [scrollbar-gutter:stable]", {
+    "hidden md:block": current,
+  });
 
 export function Component() {
   const params = useParams<"subreddit" | "id">();
@@ -23,13 +27,10 @@ export function Component() {
   const posts = useLoaderData() as LinkType[];
   const showing_post = !!params.id;
   return (
-    <main className={columnsStyles.Columns}>
-      <header className={showing_post ? columnsStyles.Desktop : undefined}>
+    <main className="md:grid md:grid-cols-2 h-screen">
+      <header className={current_panel(!!showing_post)}>
         <div className="Gutter">
-          <div
-            className="HStack"
-            style={{ alignItems: "center", justifyContent: "space-between" }}
-          >
+          <div className="flex gap-4 items-center justify-between">
             <Search defaultValue={params.subreddit!} />
             <Link
               to=""
@@ -41,7 +42,7 @@ export function Component() {
               <Icon name="reload" />
             </Link>
           </div>
-          <ul className="HStack" style={{ marginBlockStart: "var(--s20)" }}>
+          <ul className="flex gap-2 mt-4 overflow-auto">
             <SortEntries sort="hot">Hot</SortEntries>
             <SortEntries sort="new">New</SortEntries>
             <SortEntries sort="top" t="all">
@@ -60,7 +61,7 @@ export function Component() {
               Top today
             </SortEntries>
           </ul>
-          <ul className={postStyles.List}>
+          <ul className="mt-6 text-sm sm:text-base">
             {posts.map((post) => {
               return (
                 <Entry
@@ -76,10 +77,7 @@ export function Component() {
           </ul>
         </div>
       </header>
-      <div
-        className={!showing_post ? columnsStyles.Desktop : undefined}
-        ref={post_scroller}
-      >
+      <div className={current_panel(!showing_post)} ref={post_scroller}>
         <Outlet />
       </div>
     </main>

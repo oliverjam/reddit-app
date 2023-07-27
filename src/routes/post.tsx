@@ -1,7 +1,6 @@
-import { Link, useLoaderData, Await, useNavigation } from "react-router-dom";
+import { useLoaderData, Await } from "react-router-dom";
 import { Suspense } from "react";
 import { Post } from "../post.tsx";
-import { Icon } from "../icon.tsx";
 import { Comments } from "../comments.tsx";
 import { Comment, Link as LinkType } from "../reddit/types.ts";
 import { SortComments } from "../sort.tsx";
@@ -18,9 +17,6 @@ export function Component() {
   const data = useLoaderData() as PostData;
   return (
     <div>
-      <Link to=".." aria-label="Back">
-        <Icon name="left" />
-      </Link>
       <Post {...data.post} />
       <hr />
       <div className="Gutter" id="comments">
@@ -31,7 +27,7 @@ export function Component() {
           >
             {(comments: Awaited<PostData["comments"]>) => (
               <>
-                <ul className="HStack" style={{ marginBlockEnd: "var(--s40)" }}>
+                <ul className="flex gap-4 mb-6">
                   <SortComments sort="best">Best</SortComments>
                   <SortComments sort="top">Top</SortComments>
                   <SortComments sort="new">New</SortComments>

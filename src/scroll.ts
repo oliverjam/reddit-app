@@ -12,20 +12,20 @@ function setScrollPosition(key: string, pos: number) {
 
 /**
  * Source: https://github.com/remix-run/react-router/pull/10468#issuecomment-1577239850
- * Given a ref to a scrolling container element, keep track of its scroll
+ * Given a ref to a scrolling element, keep track of its scroll
  * position before navigation and restore it on return (e.g., back/forward nav).
  * Note that `location.key` is used in the cache key, not `location.pathname`,
  * so the same path navigated to at different points in the history stack will
  * not share the same scroll position.
  */
-export function useScrollRestoration(container: React.RefObject<HTMLElement>) {
+export function useScrollRestoration(el: React.RefObject<HTMLElement>) {
   const key = `scroll-position-${useLocation().pathname}`;
   const { state } = useNavigation();
   useEffect(() => {
     if (state === "loading") {
-      setScrollPosition(key, container.current?.scrollTop ?? 0);
+      setScrollPosition(key, el.current?.scrollTop ?? 0);
     } else if (state === "idle") {
-      container.current?.scrollTo(0, getScrollPosition(key));
+      el.current?.scrollTo(0, getScrollPosition(key));
     }
-  }, [key, state, container]);
+  }, [key, state, el]);
 }

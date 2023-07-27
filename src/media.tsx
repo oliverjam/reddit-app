@@ -1,5 +1,4 @@
 import { Link, parse_kind } from "./reddit/types.ts";
-import styles from "./media.module.css";
 import { useRef } from "react";
 
 export function Media(data: Link["data"]) {
@@ -51,13 +50,7 @@ export function Media(data: Link["data"]) {
         ></video>
       );
     case "embed":
-      return (
-        <div
-          className={styles.Media}
-          style={{ aspectRatio: `${source.width} / ${source.height}` }}
-          dangerouslySetInnerHTML={{ __html: source.html }}
-        />
-      );
+      return <div dangerouslySetInnerHTML={{ __html: source.html }} />;
     case "nothing":
       return null;
     case "mystery":
@@ -71,14 +64,12 @@ function VideoAudio({ url, width, height }: Video) {
   const AUDIO_REGEX = /DASH_\d+.mp4/;
   const audio_src = url.replace(AUDIO_REGEX, "DASH_audio.mp4");
   return (
-    <div
-      className={styles.Media}
-      style={{ aspectRatio: `${width} / ${height}` }}
-    >
+    <>
       <video
         width={width}
         height={height}
         src={url}
+        className="max-h-[80vh]"
         controls
         muted
         autoPlay
@@ -98,7 +89,7 @@ function VideoAudio({ url, width, height }: Video) {
         }}
       ></video>
       <audio src={audio_src} playsInline loop ref={audio}></audio>
-    </div>
+    </>
   );
 }
 

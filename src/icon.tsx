@@ -4,19 +4,21 @@ type IconProps = {
   size?: number;
   name: IconName;
   fill?: string;
+  className?: string;
 };
 
 export function Icon({
   size = 20,
   name,
   fill = "GrayText",
+  className,
   ...rest
 }: IconProps) {
   return (
     <svg
       {...rest}
       viewBox="0 0 24 24"
-      className="Icon"
+      className={className}
       width={size}
       height={size}
       aria-hidden="true"

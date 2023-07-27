@@ -2,7 +2,6 @@ import { useLoaderData, useParams } from "react-router-dom";
 import { CommentEntry } from "../comments.tsx";
 import { Entry } from "../entry.tsx";
 import { Kind } from "../reddit/types.ts";
-import postStyles from "../entry.module.css";
 import { Handle } from "./root.tsx";
 
 export const handle: Handle = {
@@ -15,7 +14,7 @@ export function Component() {
   return (
     <div className="Gutter">
       <h1>u/{params.user}</h1>
-      <ul className={postStyles.List}>
+      <ul className="mt-6 text-sm sm:text-base space-y-5">
         {posts.map((post) => {
           switch (post.kind) {
             case "t1":

@@ -1,7 +1,6 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html {
   --s0: 0.25rem;
@@ -15,168 +14,123 @@ html {
   font-size: clamp(0.75rem, 0.75rem + 0.5vw, 1rem);
 }
 
-body {
-  line-height: 1.5;
-  font-family: system-ui, sans-serif;
-}
-
 :is(h1, h2, h3, h4, h5, h6) {
   font-weight: 700;
   line-height: 1.2;
   word-break: break-word;
 }
 
-:is(h2, h3, h4, h5, h6) {
-  font-size: inherit;
+@layer base {
+  img,
+  iframe,
+  video {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  hr {
+    color: ButtonFace;
+  }
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+@layer components {
+  .Pill {
+    @apply max-w-max inline-flex items-center gap-2;
+    @apply rounded-lg px-2 overflow-hidden text-ellipsis whitespace-nowrap;
+    @apply font-bold bg-[ButtonFace] text-[ButtonText];
+  }
 
-a:hover {
-  text-decoration: underline;
-}
+  .PillLink:hover {
+    @apply brightness-90;
+  }
 
-/* Forces icon links to be same size as icon */
-:where(a:has(svg:only-child)) {
-  display: inline-grid;
-}
+  .PillLink[aria-current="page"] {
+    @apply bg-[AccentColor] text-[AccentColorText] filter-none;
+  }
 
-img,
-iframe,
-video {
-  max-width: 100%;
-  height: auto;
-  object-fit: cover;
-}
+  .Gutter {
+    padding: clamp(1rem, 1rem + 2vw, 3rem);
+  }
 
-ul:where([class]) {
-  list-style: none;
-  padding-inline-start: 0;
-}
+  .Cover {
+    @apply min-h-screen grid gap-2 place-content-center place-items-center;
+  }
 
-hr {
-  border-style: solid;
-  color: ButtonFace;
-}
+  .Markdown {
+    @apply leading-normal break-words;
+  }
 
-.HStack {
-  display: flex;
-  gap: var(--s20);
-}
+  .Markdown > .md {
+    @apply space-y-[var(--space,_0.5rem)];
+  }
 
-.Pill {
-  max-inline-size: max-content;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--s0);
-  border-radius: 8px;
-  padding-inline: 0.5em;
-  font-weight: 600;
-  background-color: ButtonFace;
-  color: ButtonText;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+  .Markdown :is(h1, h2, h3, h4, h5, h6, hr) {
+    --space: 1.25em;
+  }
 
-.PillLink:hover {
-  filter: brightness(90%);
-  text-decoration: none;
-}
+  .Markdown a {
+    @apply underline text-[LinkText];
+  }
 
-.PillLink[aria-current="page"] {
-  background-color: AccentColor;
-  color: AccentColorText;
-  filter: none;
-}
+  .Markdown h1 {
+    @apply text-2xl;
+  }
 
-.Gutter {
-  padding: clamp(1rem, 1rem + 2vw, 3rem);
-}
+  .Markdown h2 {
+    @apply text-xl;
+  }
 
-.Cover {
-  min-block-size: 100vh;
-  display: grid;
-  gap: var(--s10);
-  place-content: center;
-  place-items: center;
-}
+  .Markdown h3 {
+    @apply text-base;
+  }
 
-.md {
-  line-height: 1.5;
-  word-break: break-word;
-}
+  .Markdown table {
+    @apply border-collapse border border-[ButtonBorder] text-sm;
+  }
 
-.md > * + * {
-  margin-block-start: var(--space, var(--s20));
-}
+  .Markdown thead {
+    @apply bg-[ButtonFace] border-b border-b-[ButtonBorder];
+  }
 
-.md a {
-  text-decoration: underline;
-  color: LinkText;
-}
+  /* .Markdown tr:nth-child(even) {
+    @apply bg-[ButtonFace];
+  } */
 
-.md h1 {
-  font-size: 1.5rem;
-}
+  .Markdown td,
+  .Markdown th {
+    @apply py-1 px-4 border-r;
+  }
 
-.md h2 {
-  font-size: 1.25rem;
-}
+  .Markdown blockquote,
+  .Markdown pre {
+    @apply ml-1 border-l border-l-[ButtonBorder] px-2 leading-snug;
+  }
 
-.md h3 {
-  font-size: 1rem;
-}
+  .Markdown pre {
+    @apply overflow-auto;
+  }
 
-.md table {
-  border-collapse: collapse;
-  border: 1px solid;
-}
+  .Markdown code {
+    @apply text-sm;
+  }
 
-.md thead {
-  background-color: ButtonFace;
-}
+  .Markdown blockquote {
+    @apply space-y-2;
+  }
 
-.md tr:nth-child(even) {
-  background-color: ButtonFace;
-}
+  .Markdown ol {
+    @apply list-decimal pl-[1em];
+  }
 
-.md td,
-.md th {
-  padding: var(--s0) var(--s20);
-}
+  .Markdown ul {
+    @apply list-disc pl-[1em];
+  }
 
-.md blockquote,
-.md pre {
-  border-inline-start: 1px solid;
-  margin-inline-start: 0.125rem;
-  padding: 0 var(--s10);
-  line-height: 1.4;
-}
+  .Markdown :is(ol, ul) ul {
+    @apply list-[circle];
+  }
 
-.md pre {
-  overflow: auto;
-}
-
-.md blockquote > * + * {
-  margin-block-start: var(--s10);
-}
-
-.md :is(h1, h2, h3, h4, h5, h6) {
-  --space: 1.5em;
-}
-
-.md ul {
-  list-style-type: disc;
-}
-
-.md :is(ol, ul, menu, dir) ul {
-  list-style-type: circle;
-}
-
-.md :is(ol, ul, menu, dir) :is(ol, ul, menu, dir) ul {
-  list-style-type: square;
+  .Markdown :is(ol, ul) :is(ol, ul) ul {
+    @apply list-[square];
+  }
 }
