@@ -22,7 +22,6 @@ html {
 
 @layer base {
   img,
-  iframe,
   video {
     max-width: 100%;
     height: auto;

@@ -50,7 +50,13 @@ export function Media(data: Link["data"]) {
         ></video>
       );
     case "embed":
-      return <div dangerouslySetInnerHTML={{ __html: source.html }} />;
+      return (
+        <div
+          dangerouslySetInnerHTML={{ __html: source.html }}
+          className="relative min-h-[50vh]"
+          style={{ width: source.width, height: source.height }}
+        />
+      );
     case "nothing":
       return null;
     case "mystery":
@@ -115,8 +121,6 @@ type Gallery = {
 };
 
 function parse_media(data: Link["data"]): MediaKind {
-  if (data.crosspost_parent_list) return { kind: "crosspost" };
-
   const kind = parse_kind(data);
   switch (kind) {
     case "image":
