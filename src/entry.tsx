@@ -7,11 +7,14 @@ import clsx from "clsx";
 
 export function Entry(props: LinkType["data"] & { show_sub?: boolean }) {
   const [search] = useSearchParams();
+  const { subreddit } = useParams();
   const post_kind = parse_kind(props);
   const href =
     post_kind === "link"
       ? props.url
-      : relative_url(props.permalink) + "?" + search.toString();
+      : subreddit
+      ? relative_url(props.permalink) + "?" + search.toString()
+      : props.permalink;
   const params = useParams<"id">();
   const current = props.id === params.id;
   const images = props.preview?.images[0].resolutions;
