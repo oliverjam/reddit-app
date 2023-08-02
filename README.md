@@ -1,5 +1,7 @@
 # App for Reddit
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/c7a5d704-5020-46fd-aed7-1dd66dd3e55f/deploy-status)](https://app.netlify.com/sites/rddit/deploys)
+
 No idea what to name this yet. A simplified Reddit viewer—no API required. I actually use this, which is more than I can say for the official apps.
 
 ## Run locally
