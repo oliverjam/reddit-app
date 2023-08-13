@@ -28,7 +28,7 @@ const posts_cache = new Map<string, Link>();
 export async function posts(context: LoaderFunctionArgs) {
   const { subreddit, sort = "" } = context.params;
   const t = new URL(context.request.url).searchParams.get("t");
-  const url = subreddit === "all" ? "/" : "/r/" + subreddit + "/";
+  const url = subreddit === "all" ? "/" : "/r/" + subreddit + "/.json";
   const res = await get(url + sort, { limit: 15, t }) as Listing<Link>;
   for (const post of res.data.children) {
     posts_cache.set(post.data.id, post);
@@ -47,7 +47,7 @@ type PostResponse = [Listing<Link>, Listing<Comment>];
 export async function post(context: LoaderFunctionArgs) {
   const id = context.params.id!;
   const sort = new URL(context.request.url).searchParams.get("sort");
-  const url = `/comments/${id}/`;
+  const url = `/comments/${id}/.json`;
   const res = get(url, { limit: 150, sort }) as Promise<PostResponse>;
   const cached = posts_cache.get(id);
   const fresh = res.then(([listing]) => {
