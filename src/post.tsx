@@ -37,7 +37,7 @@ export function Post(props: LinkType["data"]) {
 					crosspost={true}
 				/>
 			)}
-			{kind === "self" && (
+			{selftext_html && (
 				<div
 					className="Markdown text-lg"
 					dangerouslySetInnerHTML={{ __html: selftext_html }}
