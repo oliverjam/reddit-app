@@ -93,6 +93,7 @@ export function parse_kind(data: Link["data"]): PostKind {
   if (data.preview?.images[0]?.variants?.mp4) return "gif";
   if (data.media?.oembed) return "embed";
   if (data.preview?.reddit_video_preview) return "video";
+  if (data.crosspost_parent_list) return "crosspost";
   switch (data.post_hint) {
     case "hosted:video":
     case "rich:video":
