@@ -66,7 +66,7 @@ export function Media(data: Link["data"]) {
 function VideoAudio({ url, width, height }: Video) {
 	const audio = useRef<HTMLAudioElement>(null);
 	const AUDIO_REGEX = /DASH_\d+.mp4/;
-	const audio_src = url.replace(AUDIO_REGEX, "DASH_audio.mp4");
+	const audio_src = url.replace(AUDIO_REGEX, "DASH_AUDIO_128.mp4");
 	return (
 		<>
 			<video
