@@ -10,6 +10,11 @@ const router = createBrowserRouter([
 		Component: Root,
 		children: [
 			{
+				path: "/r/:subreddit/:sort?/media",
+				loader: api.posts,
+				lazy: () => import("./routes/media.tsx"),
+			},
+			{
 				path: "/r/:subreddit/:sort?",
 				loader: api.posts,
 				lazy: () => import("./routes/subreddit.tsx"),

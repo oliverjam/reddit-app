@@ -1,4 +1,11 @@
-import { Link, Outlet, useLoaderData, useParams } from "react-router-dom";
+import {
+	Link,
+	LinkProps,
+	Outlet,
+	useLoaderData,
+	useParams,
+	useSearchParams,
+} from "react-router-dom";
 import { useRef } from "react";
 import { useScrollRestoration } from "../scroll.ts";
 import { Icon } from "../icon.tsx";
@@ -30,17 +37,21 @@ export function Component() {
 		<main className="md:grid md:grid-cols-2 h-screen">
 			<header className={current_panel(!!showing_post)}>
 				<div className="Gutter">
-					<div className="flex gap-4 items-center justify-between">
+					<div className="flex gap-4 items-center">
 						<Search defaultValue={params.subreddit!} />
-						<Link
-							to=""
-							relative="path"
-							replace
-							aria-label="Refresh posts"
-							title="Refresh posts"
-						>
-							<Icon name="reload" />
-						</Link>
+						<div className="ml-auto flex gap-3 items-center font-semibold">
+							<Link
+								to=""
+								relative="path"
+								replace
+								className="flex gap-1 items-center"
+							>
+								<Icon name="reload" /> Refresh
+							</Link>
+							<LinkWithSearch to="media" className="flex gap-1 items-center">
+								<Icon name="video" /> Media
+							</LinkWithSearch>
+						</div>
 					</div>
 					<ul className="flex gap-2 mt-4 overflow-auto">
 						<SortEntries sort="hot">Hot</SortEntries>
@@ -93,4 +104,9 @@ export function ErrorBoundary() {
 			<Outlet />
 		</div>
 	);
+}
+
+function LinkWithSearch({ to, ...rest }: LinkProps) {
+	const [s] = useSearchParams();
+	return <Link to={to + "?" + s} {...rest} />;
 }
