@@ -10,7 +10,7 @@ import type { Handle } from "./root.tsx";
 type PostData = { post: LinkType["data"]; comments: Promise<Comment[]> };
 
 export const handle: Handle<PostData> = {
-  title: ({ data }) => `${data.post.title} - r/${data.post.subreddit}`,
+  title: ({ data }) => `${data?.post?.title} - r/${data?.post?.subreddit}`,
 };
 
 export function Component() {

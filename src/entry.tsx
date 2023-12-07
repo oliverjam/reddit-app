@@ -25,8 +25,8 @@ export function Entry(
 	if (!image && props.thumbnail !== "self" && props.thumbnail !== "default") {
 		image = {
 			url: props.thumbnail,
-			width: +props.thumbnail_width,
-			height: +props.thumbnail_height,
+			width: props.thumbnail_width || 0,
+			height: props.thumbnail_height || 0,
 		};
 	}
 	return (
