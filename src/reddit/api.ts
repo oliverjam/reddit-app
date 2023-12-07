@@ -28,8 +28,9 @@ const posts_cache = new Map<string, Link>();
 export async function posts(context: LoaderFunctionArgs) {
   const { subreddit, sort = "" } = context.params;
   const t = new URL(context.request.url).searchParams.get("t");
-  const url = subreddit === "all" ? "/" : "/r/" + subreddit + "/.json";
-  const res = await get(url + sort, { limit: 15, t });
+  const url = subreddit === "all" ? "/" : join("r", subreddit, sort, ".json");
+  const res = await get(url, { limit: 15, t });
+
   const listing = parse(LinkListing, res, { abortEarly: true });
   for (const post of listing.data.children) {
     posts_cache.set(post.data.id, post);
@@ -71,4 +72,14 @@ export async function search(context: LoaderFunctionArgs) {
   const url = `/api/search_reddit_names.json`;
   const res = await get(url, { query, include_over_18: "true" });
   return res.names;
+}
+
+function join(...ss: Array<string | undefined | null | false>) {
+  let out = "";
+  for (let s of ss) {
+    if (!s) continue;
+    if (!s.startsWith("/") && !out.endsWith("/")) out += "/";
+    out += s;
+  }
+  return out;
 }
