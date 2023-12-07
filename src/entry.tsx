@@ -39,7 +39,12 @@ export function Entry(
 			<div className="flex-none grid place-items-center rounded-lg bg-[ButtonFace] w-16 lg:w-24 xl:w-28 aspect-square overflow-hidden">
 				<Thumbnail icon={kind_icon(post_kind, props.stickied)} {...image} />
 			</div>
-			<header>
+			<header className="space-y-2">
+				{props.show_sub && (
+					<div className="flex gap-3 flex-wrap text-sm z-10 isolate max-w-max font-semibold">
+						<Meta.Subreddit>{props.subreddit}</Meta.Subreddit>
+					</div>
+				)}
 				<h2>
 					<Link to={href} className="after:absolute after:inset-0">
 						{props.title}{" "}
@@ -53,9 +58,8 @@ export function Entry(
 						)}
 					</Link>
 				</h2>
-				<div className="flex gap-3 flex-wrap mt-2 text-sm z-10 isolate max-w-max">
+				<div className="flex gap-3 flex-wrap text-sm z-10 isolate max-w-max font-semibold">
 					<Meta.Score>{props.score}</Meta.Score>
-					{props.show_sub && <Meta.Subreddit>{props.subreddit}</Meta.Subreddit>}
 					<Meta.Comments
 						href={
 							props.crosspost ? props.permalink : relative_url(props.permalink)
