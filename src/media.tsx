@@ -33,10 +33,20 @@ export function Media(data: Link["data"]) {
 				</ul>
 			);
 		case "video":
-			return <VideoAudio {...source} />;
+			return (
+				<VideoAudio
+					className="max-h-[75vh] w-auto"
+					src={source.url}
+					width={source.width}
+					height={source.height}
+					controls
+					playsInline
+				/>
+			);
 		case "gif":
 			return (
 				<video
+					className="max-h-[75vh] w-auto"
 					width={source.width}
 					height={source.height}
 					src={source.url}
@@ -51,7 +61,7 @@ export function Media(data: Link["data"]) {
 			return (
 				<div
 					dangerouslySetInnerHTML={{ __html: source.html }}
-					className="relative min-h-[50vh]"
+					className="relative max-w-full min-h-[50vh]"
 					style={{ width: source.width, height: source.height }}
 				/>
 			);
@@ -63,22 +73,24 @@ export function Media(data: Link["data"]) {
 	}
 }
 
-function VideoAudio({ url, width, height }: Video) {
+export function VideoAudio({
+	src,
+	loop,
+	...rest
+}: JSX.IntrinsicElements["video"]) {
+	if (!src) {
+		console.error("Missing video src");
+		return null;
+	}
 	const audio = useRef<HTMLAudioElement>(null);
 	const AUDIO_REGEX = /DASH_\d+.mp4/;
-	const audio_src = url.replace(AUDIO_REGEX, "DASH_AUDIO_128.mp4");
+	const audio_src = src.replace(AUDIO_REGEX, "DASH_AUDIO_128.mp4");
 	return (
 		<>
 			<video
-				width={width}
-				height={height}
-				src={url}
-				className="max-h-[80vh]"
-				controls
-				muted
-				autoPlay
-				playsInline
-				loop
+				{...rest}
+				src={src}
+				loop={loop}
 				onPlaying={() => audio.current?.play()}
 				onPause={() => audio.current?.pause()}
 				onSeeked={(e) => {
@@ -92,7 +104,7 @@ function VideoAudio({ url, width, height }: Video) {
 					}
 				}}
 			></video>
-			<audio src={audio_src} playsInline loop ref={audio}></audio>
+			<audio src={audio_src} playsInline loop={loop} ref={audio}></audio>
 		</>
 	);
 }
@@ -118,7 +130,7 @@ type Gallery = {
 	images: Array<{ url: string; width: number; height: number }>;
 };
 
-function parse_media(data: Link["data"]): MediaKind {
+export function parse_media(data: Link["data"]): MediaKind {
 	const kind = parse_kind(data);
 	switch (kind) {
 		case "image":
