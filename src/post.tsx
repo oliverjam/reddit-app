@@ -14,6 +14,7 @@ export function Post(props: LinkType["data"]) {
 		title,
 		selftext_html,
 		crosspost_parent_list,
+		created_utc,
 	} = props;
 	const kind = parse_kind(props);
 	return (
@@ -26,10 +27,11 @@ export function Post(props: LinkType["data"]) {
 					</Link>
 				</div>
 				<h1 className="text-lg lg:text-xl xl:text-2xl">{title}</h1>
-				<div className="flex gap-4 items-center">
+				<div className="flex gap-4 items-center font-semibold">
 					<Meta.Score>{score}</Meta.Score>
 					<Meta.Comments href="">{num_comments}</Meta.Comments>
 					<Meta.Author>{author}</Meta.Author>
+					<Meta.Created href={props.permalink}>{created_utc}</Meta.Created>
 				</div>
 			</header>
 			{kind === "crosspost" && (
