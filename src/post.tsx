@@ -18,17 +18,19 @@ export function Post(props: LinkType["data"]) {
 	const kind = parse_kind(props);
 	return (
 		<article className="Gutter max-w-3xl space-y-4">
-			<header>
-				<div className="flex gap-4 items-center">
-					<Link to=".." aria-label="Back">
-						<Icon name="left" />
+			<header className="space-y-2">
+				<div className="flex gap-3 items-center">
+					<Link to=".." className="Pill PillLink md:hidden">
+						<Icon name="left" size={16} />
+						{subreddit}
 					</Link>
+				</div>
+				<h1 className="text-lg lg:text-xl xl:text-2xl">{title}</h1>
+				<div className="flex gap-4 items-center">
 					<Meta.Score>{score}</Meta.Score>
-					<Meta.Subreddit>{subreddit}</Meta.Subreddit>
 					<Meta.Comments href="">{num_comments}</Meta.Comments>
 					<Meta.Author>{author}</Meta.Author>
 				</div>
-				<h1 className="mt-4 text-lg lg:text-xl xl:text-2xl">{title}</h1>
 			</header>
 			{kind === "crosspost" && (
 				<Entry

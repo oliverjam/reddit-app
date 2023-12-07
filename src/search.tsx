@@ -25,6 +25,7 @@ export function Search({ defaultValue }: { defaultValue: string }) {
       }}
     >
       <input
+        className="font-bold text-lg px-2 -ml-2"
         ref={ref}
         name="query"
         aria-label="Search subreddits"

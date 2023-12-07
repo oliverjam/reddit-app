@@ -48,7 +48,7 @@ html {
   }
 
   .Gutter {
-    padding: clamp(1rem, 1rem + 2vw, 3rem);
+    @apply p-4 sm:p-6 lg:p-10;
   }
 
   .Cover {

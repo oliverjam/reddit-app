@@ -61,7 +61,7 @@ export function Component() {
               Top today
             </SortEntries>
           </ul>
-          <ul className="mt-6 text-sm sm:text-base">
+          <ul className="mt-6">
             {posts.map((post) => {
               return (
                 <Entry
