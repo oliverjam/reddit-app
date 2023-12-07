@@ -1,15 +1,15 @@
 {
-  "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "jsx": "react-jsx",
-    "types": ["vite/client"],
-    "noEmit": true,
-    "isolatedModules": true,
-    "allowImportingTsExtensions": true
-  }
+	"compilerOptions": {
+		"strict": true,
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"jsx": "react-jsx",
+		"types": ["vite/client"],
+		"noEmit": true,
+		"isolatedModules": true,
+		"allowImportingTsExtensions": true
+	}
 }

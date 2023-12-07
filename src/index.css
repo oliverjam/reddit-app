@@ -3,133 +3,133 @@
 @tailwind utilities;
 
 html {
-  --s0: 0.25rem;
-  --s10: 0.5rem;
-  --s20: 1rem;
-  --s30: 1.25rem;
-  --s40: 1.5rem;
-  --s50: 2rem;
-  --s60: 4rem;
-  color-scheme: light dark;
-  font-size: clamp(0.75rem, 0.75rem + 0.5vw, 1rem);
+	--s0: 0.25rem;
+	--s10: 0.5rem;
+	--s20: 1rem;
+	--s30: 1.25rem;
+	--s40: 1.5rem;
+	--s50: 2rem;
+	--s60: 4rem;
+	color-scheme: light dark;
+	font-size: clamp(0.75rem, 0.75rem + 0.5vw, 1rem);
 }
 
 :is(h1, h2, h3, h4, h5, h6) {
-  font-weight: 700;
-  line-height: 1.2;
-  word-break: break-word;
+	font-weight: 700;
+	line-height: 1.2;
+	word-break: break-word;
 }
 
 @layer base {
-  img,
-  video {
-    max-width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
-  hr {
-    color: ButtonFace;
-  }
+	img,
+	video {
+		max-width: 100%;
+		height: auto;
+		object-fit: cover;
+	}
+	hr {
+		color: ButtonFace;
+	}
 }
 
 @layer components {
-  .Pill {
-    @apply max-w-max inline-flex items-center gap-2;
-    @apply rounded-lg px-2 overflow-hidden text-ellipsis whitespace-nowrap;
-    @apply font-bold bg-[ButtonFace] text-[ButtonText];
-  }
+	.Pill {
+		@apply max-w-max inline-flex items-center gap-2;
+		@apply rounded-lg px-2 overflow-hidden text-ellipsis whitespace-nowrap;
+		@apply font-bold bg-[ButtonFace] text-[ButtonText];
+	}
 
-  .PillLink:hover {
-    @apply brightness-90;
-  }
+	.PillLink:hover {
+		@apply brightness-90;
+	}
 
-  .PillLink[aria-current="page"] {
-    @apply bg-[AccentColor] text-[AccentColorText] filter-none;
-  }
+	.PillLink[aria-current="page"] {
+		@apply bg-[AccentColor] text-[AccentColorText] filter-none;
+	}
 
-  .Gutter {
-    @apply p-4 sm:p-6 lg:p-10;
-  }
+	.Gutter {
+		@apply p-4 sm:p-6 lg:p-10;
+	}
 
-  .Cover {
-    @apply min-h-screen grid gap-2 place-content-center place-items-center;
-  }
+	.Cover {
+		@apply min-h-screen grid gap-2 place-content-center place-items-center;
+	}
 
-  .Markdown {
-    @apply leading-normal break-words;
-  }
+	.Markdown {
+		@apply leading-normal break-words;
+	}
 
-  .Markdown > .md {
-    @apply space-y-[var(--space,_0.5rem)];
-  }
+	.Markdown > .md {
+		@apply space-y-[var(--space,_0.5rem)];
+	}
 
-  .Markdown :is(h1, h2, h3, h4, h5, h6, hr) {
-    --space: 1.25em;
-  }
+	.Markdown :is(h1, h2, h3, h4, h5, h6, hr) {
+		--space: 1.25em;
+	}
 
-  .Markdown a {
-    @apply underline text-[LinkText];
-  }
+	.Markdown a {
+		@apply underline text-[LinkText];
+	}
 
-  .Markdown h1 {
-    @apply text-2xl;
-  }
+	.Markdown h1 {
+		@apply text-2xl;
+	}
 
-  .Markdown h2 {
-    @apply text-xl;
-  }
+	.Markdown h2 {
+		@apply text-xl;
+	}
 
-  .Markdown h3 {
-    @apply text-base;
-  }
+	.Markdown h3 {
+		@apply text-base;
+	}
 
-  .Markdown table {
-    @apply border-collapse border border-[ButtonBorder] text-sm;
-  }
+	.Markdown table {
+		@apply border-collapse border border-[ButtonBorder] text-sm;
+	}
 
-  .Markdown thead {
-    @apply bg-[ButtonFace] border-b border-b-[ButtonBorder];
-  }
+	.Markdown thead {
+		@apply bg-[ButtonFace] border-b border-b-[ButtonBorder];
+	}
 
-  /* .Markdown tr:nth-child(even) {
+	/* .Markdown tr:nth-child(even) {
     @apply bg-[ButtonFace];
   } */
 
-  .Markdown td,
-  .Markdown th {
-    @apply py-1 px-4 border-r;
-  }
+	.Markdown td,
+	.Markdown th {
+		@apply py-1 px-4 border-r;
+	}
 
-  .Markdown blockquote,
-  .Markdown pre {
-    @apply ml-1 border-l border-l-[ButtonBorder] px-2 leading-snug;
-  }
+	.Markdown blockquote,
+	.Markdown pre {
+		@apply ml-1 border-l border-l-[ButtonBorder] px-2 leading-snug;
+	}
 
-  .Markdown pre {
-    @apply overflow-auto;
-  }
+	.Markdown pre {
+		@apply overflow-auto;
+	}
 
-  .Markdown code {
-    @apply text-sm;
-  }
+	.Markdown code {
+		@apply text-sm;
+	}
 
-  .Markdown blockquote {
-    @apply space-y-2;
-  }
+	.Markdown blockquote {
+		@apply space-y-2;
+	}
 
-  .Markdown ol {
-    @apply list-decimal pl-[1em];
-  }
+	.Markdown ol {
+		@apply list-decimal pl-[1em];
+	}
 
-  .Markdown ul {
-    @apply list-disc pl-[1em];
-  }
+	.Markdown ul {
+		@apply list-disc pl-[1em];
+	}
 
-  .Markdown :is(ol, ul) ul {
-    @apply list-[circle];
-  }
+	.Markdown :is(ol, ul) ul {
+		@apply list-[circle];
+	}
 
-  .Markdown :is(ol, ul) :is(ol, ul) ul {
-    @apply list-[square];
-  }
+	.Markdown :is(ol, ul) :is(ol, ul) ul {
+		@apply list-[square];
+	}
 }

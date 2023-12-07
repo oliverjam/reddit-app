@@ -10,48 +10,48 @@ import type { Handle } from "./root.tsx";
 type PostData = { post: LinkType["data"]; comments: Promise<Comment[]> };
 
 export const handle: Handle<PostData> = {
-  title: ({ data }) => `${data?.post?.title} - r/${data?.post?.subreddit}`,
+	title: ({ data }) => `${data?.post?.title} - r/${data?.post?.subreddit}`,
 };
 
 export function Component() {
-  const data = useLoaderData() as PostData;
-  return (
-    <div>
-      <Post {...data.post} />
-      <hr />
-      <div className="Gutter" id="comments">
-        <Suspense>
-          <Await
-            resolve={data.comments}
-            errorElement={<DisplayError>Failed to load comments</DisplayError>}
-          >
-            {(comments: Awaited<PostData["comments"]>) => (
-              <>
-                <ul className="flex gap-4 mb-6">
-                  <SortComments sort="best">Best</SortComments>
-                  <SortComments sort="top">Top</SortComments>
-                  <SortComments sort="new">New</SortComments>
-                  <SortComments sort="old">Old</SortComments>
-                  <SortComments sort="controversial">
-                    Controversial
-                  </SortComments>
-                </ul>
-                <Comments comments={comments} />
-              </>
-            )}
-          </Await>
-        </Suspense>
-      </div>
-    </div>
-  );
+	const data = useLoaderData() as PostData;
+	return (
+		<div>
+			<Post {...data.post} />
+			<hr />
+			<div className="Gutter" id="comments">
+				<Suspense>
+					<Await
+						resolve={data.comments}
+						errorElement={<DisplayError>Failed to load comments</DisplayError>}
+					>
+						{(comments: Awaited<PostData["comments"]>) => (
+							<>
+								<ul className="flex gap-4 mb-6">
+									<SortComments sort="best">Best</SortComments>
+									<SortComments sort="top">Top</SortComments>
+									<SortComments sort="new">New</SortComments>
+									<SortComments sort="old">Old</SortComments>
+									<SortComments sort="controversial">
+										Controversial
+									</SortComments>
+								</ul>
+								<Comments comments={comments} />
+							</>
+						)}
+					</Await>
+				</Suspense>
+			</div>
+		</div>
+	);
 }
 
 Component.displayName = "PostPage";
 
 export function ErrorBoundary() {
-  return (
-    <div className="Cover">
-      <DisplayError>Failed to load post</DisplayError>
-    </div>
-  );
+	return (
+		<div className="Cover">
+			<DisplayError>Failed to load post</DisplayError>
+		</div>
+	);
 }
