@@ -22,7 +22,12 @@ export function Entry(
 	const images = props.preview?.images[0].resolutions;
 	// images are in ascending size order. Try to use bigger one
 	let image = images?.[1] || images?.[0];
-	if (!image && props.thumbnail !== "self" && props.thumbnail !== "default") {
+	if (
+		!image &&
+		props.thumbnail &&
+		props.thumbnail !== "self" &&
+		props.thumbnail !== "default"
+	) {
 		image = {
 			url: props.thumbnail,
 			width: props.thumbnail_width || 0,
@@ -36,9 +41,11 @@ export function Entry(
 				{ "bg-[AccentColor] text-[AccentColorText]": current }
 			)}
 		>
-			<div className="flex-none grid place-items-center rounded-lg bg-[ButtonFace] w-16 lg:w-24 xl:w-28 aspect-square overflow-hidden">
-				<Thumbnail icon={kind_icon(post_kind, props.stickied)} {...image} />
-			</div>
+			{image && (
+				<div className="flex-none grid place-items-center rounded-lg bg-[ButtonFace] w-16 lg:w-24 xl:w-32 aspect-square overflow-hidden">
+					<Thumbnail icon={kind_icon(post_kind)} {...image} />
+				</div>
+			)}
 			<header className="space-y-2">
 				{props.show_sub && (
 					<div className="flex gap-3 flex-wrap text-sm z-10 isolate max-w-max font-semibold">
@@ -110,8 +117,7 @@ function Thumbnail({ url, width, height, icon }: ThumbnailProps) {
 	);
 }
 
-function kind_icon(kind: PostKind, stickied: boolean): IconName | false {
-	if (stickied) return "stickied";
+function kind_icon(kind: PostKind): IconName | false {
 	switch (kind) {
 		case "gallery":
 			return "image";
@@ -119,10 +125,6 @@ function kind_icon(kind: PostKind, stickied: boolean): IconName | false {
 		case "video":
 		case "gif":
 			return "video";
-		case "self":
-			return "self";
-		case "link":
-			return "link";
 		default:
 			return false;
 	}
