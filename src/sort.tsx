@@ -30,7 +30,9 @@ export function SortEntries({ sort, t, children }: EntriesProps) {
 	to_search.delete("t");
 	if (t) to_search.set("t", t);
 
-	let to = `/r/${params.subreddit}/`;
+	const category = pathname.startsWith("/u") ? "u" : "r";
+
+	let to = `/${category}/${params.subreddit}/`;
 	if (sort !== "hot") to += `${sort}/`;
 	to += permalink + "?" + to_search;
 

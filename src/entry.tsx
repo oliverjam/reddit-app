@@ -1,8 +1,13 @@
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import {
+	Link,
+	useLocation,
+	useParams,
+	useSearchParams,
+} from "react-router-dom";
 import { Icon, IconName } from "./icon.tsx";
 import { parse_kind } from "./reddit/types.ts";
 import * as Meta from "./meta.tsx";
-import type { Link as LinkType, PostKind } from "./reddit/types.ts";
+import type { Link as LinkType, Kind, PostKind } from "./reddit/types.ts";
 import clsx from "clsx";
 
 export function Entry(
@@ -18,7 +23,8 @@ export function Entry(
 			? relative_url(props.permalink) + "?" + search.toString()
 			: props.permalink;
 	const params = useParams<"id">();
-	const current = props.id === params.id;
+	const { hash } = useLocation();
+	const current = !hash && props.id === params.id;
 	const images = props.preview?.images[0].resolutions;
 	// images are in ascending size order. Try to use bigger one
 	let image = images?.[1] || images?.[0];
@@ -48,7 +54,7 @@ export function Entry(
 			)}
 			<header className="space-y-2">
 				{props.show_sub && (
-					<div className="flex gap-3 flex-wrap text-sm z-10 isolate max-w-max font-semibold">
+					<div className="flex gap-3 flex-wrap text-sm isolate relative z-10 max-w-max font-semibold">
 						<Meta.Subreddit>{props.subreddit}</Meta.Subreddit>
 					</div>
 				)}
@@ -65,7 +71,7 @@ export function Entry(
 						)}
 					</Link>
 				</h2>
-				<div className="flex gap-3 flex-wrap text-sm z-10 isolate max-w-max font-semibold">
+				<div className="flex gap-3 flex-wrap text-sm isolate max-w-max font-semibold">
 					<Meta.Score>{props.score}</Meta.Score>
 					<Meta.Comments
 						href={

@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import clsx from "clsx";
 import { Time } from "./time.tsx";
 import { Comment as CommentType, Kind } from "./reddit/types.ts";
+import { useEffect, useRef } from "react";
+import * as Meta from "./meta.tsx";
 
 export function Comments({ comments }: { comments: Kind[] }) {
 	if (comments.length === 1 && comments[0].kind === "more") {
@@ -31,12 +33,25 @@ function Comment({
 	is_submitter: op,
 	distinguished,
 	score,
+	id,
 }: CommentType["data"]) {
+	const ref = useRef<HTMLDetailsElement>(null);
+	const { hash } = useLocation();
+	const comment_id = hash.replace("#", "");
+	const current = id === comment_id;
 	const mod = distinguished === "moderator";
 	const closed = (mod && stickied) || score < -5;
+
+	useEffect(() => {
+		if (ref.current?.id === comment_id) ref.current?.scrollIntoView();
+	}, [comment_id]);
 	return (
 		<details
-			className="space-y-2 [&[open]>summary]:after:content-none"
+			ref={ref}
+			id={id}
+			className={clsx("space-y-2 [&[open]>summary]:after:content-none", {
+				"bg-yellow-200": current,
+			})}
 			open={!closed}
 		>
 			<summary className="list-none text-sm after:content-['+'] after:ml-2 after:p-1">
@@ -61,25 +76,42 @@ function Comment({
 }
 
 export function CommentEntry({
-	link_permalink,
 	link_title,
 	score,
 	permalink,
 	created_utc,
 	body_html,
+	link_id,
+	id,
+	subreddit,
 }: CommentType["data"]) {
-	const { pathname } = new URL(link_permalink!);
+	const { subreddit: user } = useParams();
+	link_id = link_id?.replace("t3_", "");
+	const title_slug = link_title?.replace(/\s/g, "_");
+	const url = `/u/${user}/comments/${link_id}/${title_slug}/#${id}`;
+	const { hash } = useLocation();
+	const current = id === hash.replace("#", "");
 	return (
-		<li className="text-sm">
-			<Link to={pathname}>
-				<h2>{link_title}</h2>
-			</Link>
-			<div className="mt-2 ml-1 pl-4 border-l border-[ButtonFace]">
-				<Score>{score}</Score>
-				<Divider />
-				<Permalink href={permalink}>{created_utc}</Permalink>
-				<Markdown __html={body_html} />
-			</div>
+		<li
+			className={clsx("text-sm p-3 -mx-3 rounded-lg", {
+				"bg-[AccentColor] text-[AccentColorText]": current,
+			})}
+		>
+			<header className="space-y-2">
+				<div className="flex gap-3 flex-wrap text-sm z-10 isolate max-w-max font-semibold">
+					<Meta.Subreddit>{subreddit!}</Meta.Subreddit>
+				</div>
+				<h2>
+					<Link to={url}>{link_title}</Link>
+				</h2>
+
+				<div className="ml-1 pl-4 border-l border-[ButtonFace]">
+					<Score>{score}</Score>
+					<Divider />
+					<Permalink href={permalink}>{created_utc}</Permalink>
+					<Markdown __html={body_html} />
+				</div>
+			</header>
 		</li>
 	);
 }

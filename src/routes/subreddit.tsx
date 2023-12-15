@@ -3,7 +3,9 @@ import {
 	LinkProps,
 	Outlet,
 	useLoaderData,
+	useLocation,
 	useParams,
+	useRouteError,
 	useSearchParams,
 } from "react-router-dom";
 import { useRef } from "react";
@@ -13,9 +15,10 @@ import { SortEntries } from "../sort.tsx";
 import { Search } from "../search.tsx";
 import { Entry } from "../entry.tsx";
 import { DisplayError } from "../error.tsx";
-import type { Link as LinkType } from "../reddit/types.ts";
+import type { Kind } from "../reddit/types.ts";
 import type { Handle } from "./root.tsx";
 import clsx from "clsx";
+import { CommentEntry } from "../comments.tsx";
 
 export const handle: Handle = {
 	title: ({ params }) => `r/${params.subreddit}`,
@@ -31,7 +34,9 @@ export function Component() {
 	const post_scroller = useRef<HTMLDivElement>(null);
 	useScrollRestoration(post_scroller);
 
-	const posts = useLoaderData() as LinkType[];
+	const posts = useLoaderData() as Array<Kind>;
+	const { pathname } = useLocation();
+	const user_page = pathname.startsWith("/u");
 	const showing_post = !!params.id;
 	return (
 		<main className="md:grid md:grid-cols-2 h-screen">
@@ -74,16 +79,22 @@ export function Component() {
 					</ul>
 					<ul className="mt-6">
 						{posts.map((post) => {
-							return (
-								<Entry
-									{...post.data}
-									show_sub={
-										params.subreddit === "all" ||
-										params.subreddit?.includes("+")
-									}
-									key={post.data.id}
-								/>
-							);
+							switch (post.kind) {
+								case "t1":
+									return <CommentEntry {...post.data} key={post.data.id} />;
+								case "t3":
+									return (
+										<Entry
+											{...post.data}
+											show_sub={
+												params.subreddit === "all" ||
+												user_page ||
+												params.subreddit?.includes("+")
+											}
+											key={post.data.id}
+										/>
+									);
+							}
 						})}
 					</ul>
 				</div>
@@ -98,6 +109,7 @@ export function Component() {
 Component.displayName = "SubredditPage";
 
 export function ErrorBoundary() {
+	const e = useRouteError();
 	return (
 		<div className="Cover">
 			<DisplayError>Failed to load posts</DisplayError>

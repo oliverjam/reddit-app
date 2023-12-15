@@ -66,6 +66,7 @@ const BaseCommentData = merge([
   object({
     link_title: optional(string()),
     link_permalink: optional(string()),
+    link_id: optional(string()),
     body: string(),
     body_html: string(),
     is_submitter: boolean(),

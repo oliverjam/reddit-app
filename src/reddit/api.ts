@@ -1,5 +1,5 @@
 import { defer, LoaderFunctionArgs } from "react-router-dom";
-import { Link, LinkListing, Listing, parse, Post } from "./types.ts";
+import { Kind, Listing, parse, Post } from "./types.ts";
 
 export function get(
   pathname: string,
@@ -23,19 +23,23 @@ export function get(
   });
 }
 
-const posts_cache = new Map<string, Link>();
+const posts_cache = new Map<string, Kind>();
 
-export async function posts(context: LoaderFunctionArgs) {
-  const { subreddit, sort = "" } = context.params;
-  const t = new URL(context.request.url).searchParams.get("t");
-  const url = subreddit === "all" ? "/" : join("r", subreddit, sort, ".json");
-  const res = await get(url, { limit: 15, t });
+export function posts(category: "user" | "r") {
+  return async (context: LoaderFunctionArgs) => {
+    const { subreddit, sort = "" } = context.params;
+    const t = new URL(context.request.url).searchParams.get("t");
+    const url = subreddit === "all"
+      ? "/"
+      : join(category, subreddit, sort, ".json");
+    const res = await get(url, { limit: 15, t });
 
-  const listing = parse(LinkListing, res, { abortEarly: true });
-  for (const post of listing.data.children) {
-    posts_cache.set(post.data.id, post);
-  }
-  return listing.data.children;
+    const listing = parse(Listing, res, { abortEarly: true });
+    for (const post of listing.data.children) {
+      posts_cache.set(post.data.id, post);
+    }
+    return listing.data.children;
+  };
 }
 
 export async function user(context: LoaderFunctionArgs) {
@@ -46,11 +50,11 @@ export async function user(context: LoaderFunctionArgs) {
 }
 
 export async function post(context: LoaderFunctionArgs) {
-  const id = context.params.id!;
+  const { id } = context.params;
   const sort = new URL(context.request.url).searchParams.get("sort");
-  const url = `/comments/${id}/.json`;
+  const url = join("comments", id, ".json");
   const res = get(url, { limit: 150, sort });
-  const cached = posts_cache.get(id);
+  const cached = posts_cache.get(id!);
   const fresh = res.then((json: unknown) => {
     const [listing] = parse(Post, json, { abortEarly: true });
     const post = listing.data.children[0];

@@ -11,12 +11,12 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "/r/:subreddit/:sort?/media",
-				loader: api.posts,
+				loader: api.posts("r"),
 				lazy: () => import("./routes/media.tsx"),
 			},
 			{
 				path: "/r/:subreddit/:sort?",
-				loader: api.posts,
+				loader: api.posts("r"),
 				lazy: () => import("./routes/subreddit.tsx"),
 				children: [
 					{
@@ -27,10 +27,22 @@ const router = createBrowserRouter([
 				],
 			},
 			{
-				path: "/u/:user",
-				loader: api.user,
-				lazy: () => import("./routes/user.tsx"),
+				path: "/u/:subreddit/:sort?",
+				loader: api.posts("user"),
+				lazy: () => import("./routes/subreddit.tsx"),
+				children: [
+					{
+						path: "comments/:id/:slug?/*?",
+						loader: api.post,
+						lazy: () => import("./routes/post.tsx"),
+					},
+				],
 			},
+			// {
+			// 	path: "/u/:user",
+			// 	loader: api.user,
+			// 	lazy: () => import("./routes/user.tsx"),
+			// },
 			{ path: "/search", loader: api.search },
 			{ path: "/*", lazy: () => import("./routes/missing.tsx") },
 		],
