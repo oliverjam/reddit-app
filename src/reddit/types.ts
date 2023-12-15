@@ -159,18 +159,18 @@ const LinkData = merge([
         height: number(),
       })),
     }))),
-    gallery_data: optional(object({
+    gallery_data: nullable(optional(object({
       items: array(object({
         media_id: string(),
       })),
-    })),
-    media_metadata: optional(record(object({
+    }))),
+    media_metadata: nullable(optional(record(object({
       s: object({
         x: number(),
         y: number(),
         u: string(),
       }),
-    }))),
+    })))),
   }),
 ]);
 
