@@ -1,4 +1,4 @@
-import { useLoaderData, Await } from "react-router-dom";
+import { useLoaderData, Await, useRouteError, Link } from "react-router-dom";
 import { Suspense } from "react";
 import { Post } from "../post.tsx";
 import { Comments } from "../comments.tsx";
@@ -6,6 +6,7 @@ import { Comment, Link as LinkType } from "../reddit/types.ts";
 import { SortComments } from "../sort.tsx";
 import { DisplayError } from "../error.tsx";
 import type { Handle } from "./root.tsx";
+import { Icon } from "../icon.tsx";
 
 type PostData = { post: LinkType["data"]; comments: Promise<Comment[]> };
 
@@ -35,6 +36,17 @@ export function Component() {
 									<SortComments sort="controversial">
 										Controversial
 									</SortComments>
+									<li>
+										<Link
+											to=""
+											relative="path"
+											replace
+											className="flex gap-1 items-center"
+											aria-label="Refresh comments"
+										>
+											<Icon name="reload" />
+										</Link>
+									</li>
 								</ul>
 								<Comments comments={comments} />
 							</>
@@ -49,6 +61,8 @@ export function Component() {
 Component.displayName = "PostPage";
 
 export function ErrorBoundary() {
+	const e = useRouteError();
+	console.error(e);
 	return (
 		<div className="Cover">
 			<DisplayError>Failed to load post</DisplayError>
