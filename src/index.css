@@ -102,7 +102,7 @@ html {
 
 	.Markdown blockquote,
 	.Markdown pre {
-		@apply border-l-2 border-current rounded-r-lg text-md bg-[ButtonFace] p-2 leading-snug;
+		@apply border-l-2 border-current rounded-r-lg text-base bg-[ButtonFace] p-2 leading-snug;
 	}
 
 	.Markdown pre {
