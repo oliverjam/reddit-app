@@ -54,7 +54,7 @@ function Comment({
 			})}
 			open={!closed}
 		>
-			<summary className="list-none text-sm after:content-['+'] after:ml-2 after:p-1">
+			<summary className="list-none [&::-webkit-details-marker]:hidden text-sm after:content-['+'] after:ml-2 after:p-1">
 				<Link
 					to={"/u/" + author}
 					className={clsx("font-semibold break-words", {
