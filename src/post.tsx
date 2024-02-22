@@ -9,6 +9,7 @@ export function Post(props: LinkType["data"]) {
 	const {
 		score,
 		subreddit,
+		url,
 		num_comments,
 		author,
 		title,
@@ -26,7 +27,21 @@ export function Post(props: LinkType["data"]) {
 						{subreddit}
 					</Link>
 				</div>
-				<h1 className="text-lg lg:text-xl xl:text-2xl">{title}</h1>
+				<h1 className="text-lg lg:text-xl xl:text-2xl">
+					{kind === "link" ? (
+						<a href={url} className="hover:underline">
+							{title}{" "}
+							<Icon
+								name="external"
+								className="inline align-baseline"
+								fill="currentcolor"
+								size={16}
+							/>
+						</a>
+					) : (
+						title
+					)}
+				</h1>
 				<div className="flex gap-4 items-center font-semibold">
 					<Meta.Score>{score}</Meta.Score>
 					<Meta.Comments href="">{num_comments}</Meta.Comments>

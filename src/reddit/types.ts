@@ -239,6 +239,6 @@ export function parse_kind(data: Link["data"]): PostKind {
     case "self":
       return "self";
   }
-  if (data.domain === "reddit.com") return "link";
+  if (data.domain !== window.location.hostname) return "link";
   return "self";
 }
