@@ -222,6 +222,7 @@ export type PostKind =
   | "crosspost";
 
 export function parse_kind(data: Link["data"]): PostKind {
+	if (data.is_self) return "self";
   if (data.gallery_data) return "gallery";
   if (data.is_video) return "video";
   if (data.preview?.images[0]?.variants?.mp4) return "gif";
