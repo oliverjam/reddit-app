@@ -168,7 +168,7 @@ const LinkData = merge([
       s: object({
         x: number(),
         y: number(),
-        u: string(),
+        u: optional(string()),
       }),
     })))),
   }),

@@ -110,6 +110,7 @@ Component.displayName = "SubredditPage";
 
 export function ErrorBoundary() {
 	const e = useRouteError();
+	console.error(e.issues);
 	return (
 		<div className="Cover">
 			<DisplayError>Failed to load posts</DisplayError>
