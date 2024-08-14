@@ -61,8 +61,8 @@ export function Media(data: Link["data"]) {
 			return (
 				<div
 					dangerouslySetInnerHTML={{ __html: source.html }}
-					className="relative max-w-full min-h-[50vh]"
-					style={{ width: source.width, height: source.height }}
+					className="relative w-full max-h-[75vh] [&>iframe]:w-full [&>iframe]:h-full"
+					style={{ aspectRatio: source.width + "/" + source.height }}
 				/>
 			);
 		case "nothing":

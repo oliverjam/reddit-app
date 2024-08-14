@@ -10,7 +10,7 @@ export function Comments({ comments }: { comments: Kind[] }) {
 		return <button>+{comments[0].data.count}</button>;
 	}
 	return (
-		<ul className="[&_&]:border-l [&_&]:mt-2[&_&]:ml-1 [&_&]:pt-2 [&_&]:pl-5 space-y-5">
+		<ul className="[&_&]:border-l [&_&]:mt-2 [&_&]:ml-1 [&_&]:pt-2 [&_&]:pl-5 space-y-5">
 			{comments.map((child) => {
 				if (child.kind !== "t1") return null;
 				return (
