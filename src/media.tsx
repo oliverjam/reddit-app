@@ -138,9 +138,9 @@ export function parse_media(data: Link["data"]): MediaKind {
 		case "gallery":
 			return {
 				kind: "gallery",
-				images: data.gallery_data.items.map(({ media_id }) => {
-					const { s } = data.media_metadata[media_id];
-					return { url: s.u, width: s.x, height: s.y };
+				images: data.gallery_data!.items.map(({ media_id }) => {
+					const { s } = data.media_metadata![media_id];
+					return { url: s.u || s.gif || "", width: s.x, height: s.y };
 				}),
 			};
 		case "video": {
@@ -154,9 +154,9 @@ export function parse_media(data: Link["data"]): MediaKind {
 			};
 		}
 		case "embed":
-			return { kind: "embed", ...data?.media?.oembed! };
+			return { kind: "embed", ...data?.media?.oembed!, height: data?.media?.oembed?.height || 0 };
 		case "gif":
-			return { kind: "gif", ...data.preview?.images[0]?.variants?.mp4.source! };
+			return { kind: "gif", ...data.preview?.images[0]?.variants?.mp4!.source! };
 		case "link":
 		case "self":
 		case "crosspost":

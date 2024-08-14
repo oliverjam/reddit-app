@@ -169,6 +169,8 @@ const LinkData = merge([
         x: number(),
         y: number(),
         u: optional(string()),
+				gif: optional(string()),
+				mp4: optional(string()),
       }),
     })))),
   }),
