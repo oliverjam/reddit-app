@@ -8,7 +8,6 @@ import {
 	number,
 	object,
 	optional,
-	parse as _parse,
 	picklist,
 	lazy,
 	string,
