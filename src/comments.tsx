@@ -11,11 +11,11 @@ export function Comments({ comments }: { comments: Kind[] }) {
 	}
 	return (
 		<ul className="[&_&]:border-l [&_&]:mt-2 [&_&]:ml-1 [&_&]:pt-2 [&_&]:pl-5 space-y-5">
-			{comments.map((child) => {
+			{comments.map((child, i) => {
 				if (child.kind !== "t1") return null;
 				return (
 					<li key={child.data.id}>
-						<Comment {...child.data} />
+						<Comment {...child.data} index={i} />
 					</li>
 				);
 			})}
@@ -34,13 +34,14 @@ function Comment({
 	distinguished,
 	score,
 	id,
-}: CommentType["data"]) {
+	index,
+}: CommentType["data"] & { index: number }) {
 	const ref = useRef<HTMLDetailsElement>(null);
 	const { hash } = useLocation();
 	const comment_id = hash.replace("#", "");
 	const current = id === comment_id;
 	const mod = distinguished === "moderator";
-	const closed = (mod && stickied) || score < -5;
+	const closed = (mod && stickied) || (mod && index === 0) || score < -5;
 
 	useEffect(() => {
 		if (ref.current?.id === comment_id) ref.current?.scrollIntoView();
