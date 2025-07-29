@@ -5,14 +5,14 @@ export function get(
 	pathname: string,
 	search: Record<string, string | number | null>,
 ) {
-	const url = new URL(location.origin);
+	const url = new URL("https://api.reddit.com/");
 	url.searchParams.set("raw_json", "1");
 	for (const [name, value] of Object.entries(search)) {
 		if (value != null) {
 			url.searchParams.set(name, value.toString());
 		}
 	}
-	url.pathname = "api" + pathname;
+	url.pathname = pathname;
 	console.log(`${new Date().toLocaleTimeString()} Fetching ${url}`);
 	return fetch(url).then((res) => {
 		if (!res.ok) {
