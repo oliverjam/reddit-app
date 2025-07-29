@@ -5,7 +5,7 @@ export function get(
 	pathname: string,
 	search: Record<string, string | number | null>,
 ) {
-	const url = new URL("/api");
+	const url = new URL("/api", location.href);
 	url.searchParams.set("raw_json", "1");
 	for (const [name, value] of Object.entries(search)) {
 		if (value != null) {
