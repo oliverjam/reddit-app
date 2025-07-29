@@ -3,9 +3,9 @@ import { Kind, Listing, parse, Post } from "./types.ts";
 
 export function get(
 	pathname: string,
-	search: Record<string, string | number | null>
+	search: Record<string, string | number | null>,
 ) {
-	const url = new URL("https://api.reddit.com/");
+	const url = new URL("/api");
 	url.searchParams.set("raw_json", "1");
 	for (const [name, value] of Object.entries(search)) {
 		if (value != null) {
